@@ -9,6 +9,7 @@ import stat
 import string
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 
@@ -64,6 +65,19 @@ DEFAULTS = {
     "OPENBAO_ADDR": "http://openbao:8200",
     "OPENBAO_TOKEN_FILE_PATH": "/mnt/fast_data/openbao/ingestion-framework.token",
     "INGESTION_AUDIT_DB_URL_REF": "openbao:secret/data/ingestion-framework/audit#url",
+    "OPENBAO_IMAGE": "openbao/openbao:2.6.1",
+    "OPENBAO_DATA_PATH": "/mnt/fast_data/openbao/data",
+    "OPENBAO_INIT_FILE_PATH": "/mnt/fast_data/openbao/init.json",
+    "OPENBAO_UNSEAL_ENV_FILE": "/mnt/fast_data/openbao/unseal.env",
+    "OPENBAO_HOST_BIND": "127.0.0.1",
+    "OPENBAO_HOST_PORT": "8200",
+    "OPENBAO_KV_MOUNT": "secret",
+    "OPENBAO_SECRET_PREFIX": "ingestion-framework",
+    "OPENBAO_POLICY_NAME": "ingestion-framework",
+    "OPENBAO_TOKEN_PERIOD": "72h",
+    "OPENBAO_SEAL_MODE": "static",
+    "OPENBAO_RECOVERY_SHARES": "5",
+    "OPENBAO_RECOVERY_THRESHOLD": "3",
     "INSTALL_MSSQL_ODBC": "true",
 }
 
@@ -161,7 +175,7 @@ def write_env(path: Path, values: dict[str, str]) -> None:
     path.chmod(stat.S_IRUSR | stat.S_IWUSR)
 
 
-def build_env(rotate_secrets: bool) -> dict[str, str]:
+def build_env(rotate_secrets: bool, seal_mode: str | None = None) -> dict[str, str]:
     env_path = DEPLOY_DIR / ".env"
     values = read_env(env_path)
     for key, value in DEFAULTS.items():
@@ -172,7 +186,86 @@ def build_env(rotate_secrets: bool) -> dict[str, str]:
             values[key] = secure_token(length)
     if rotate_secrets or "AIRFLOW_FERNET_KEY" not in values:
         values["AIRFLOW_FERNET_KEY"] = fernet_key()
+    if seal_mode:
+        values["OPENBAO_SEAL_MODE"] = seal_mode
+    values.setdefault("OPENBAO_UNSEAL_KEY_ID", "ingestion-framework-1")
     return values
+
+
+def unseal_key() -> str:
+    """Generate a base64 AES-256 key for the OpenBao static seal."""
+    import base64
+
+    return base64.b64encode(secrets.token_bytes(32)).decode("ascii")
+
+
+def write_openbao_unseal_env(values: dict[str, str], rotate_secrets: bool) -> None:
+    """Write the static-seal unseal key to its own root-only file.
+
+    The key is deliberately kept out of .env and out of generated/openbao.hcl.
+    OpenBao reads the config file after dropping to the unprivileged `openbao`
+    user, so the config must stay non-secret; the key reaches the server through
+    the OPENBAO_UNSEAL_KEY environment variable instead.
+    """
+    # Written in both seal modes so Compose can always resolve its env_file.
+    # Shamir mode simply leaves the key unused, since the config omits the seal stanza.
+    path = Path(values["OPENBAO_UNSEAL_ENV_FILE"])
+    existing = read_env(path).get("OPENBAO_UNSEAL_KEY", "")
+
+    if existing and not rotate_secrets:
+        # create_directories() runs a recursive chmod over the mount, so the
+        # restrictive mode has to be re-applied on every run.
+        run_cmd(["chown", f"{EXPECTED_USER}:0", str(path)], sudo=True)
+        run_cmd(["chmod", "600", str(path)], sudo=True)
+        log_success(f"Preserved existing OpenBao unseal key at {path}.")
+        return
+
+    if existing and rotate_secrets:
+        log_warning(
+            "Rotating the OpenBao unseal key makes existing OpenBao storage "
+            f"unreadable. Move {values['OPENBAO_DATA_PATH']} aside and re-initialize, "
+            "or restore the previous key from backup."
+        )
+
+    run_cmd(["mkdir", "-p", str(path.parent)], sudo=True)
+
+    # Stage through a private temp file so the key never appears in a command line.
+    with tempfile.TemporaryDirectory() as staging:
+        staged = Path(staging) / "unseal.env"
+        staged.write_text(f"OPENBAO_UNSEAL_KEY={unseal_key()}\n")
+        staged.chmod(0o600)
+        run_cmd(
+            ["install", "-m", "600", "-o", EXPECTED_USER, "-g", "0", str(staged), str(path)],
+            sudo=True,
+        )
+    log_success(f"Generated OpenBao unseal key at {path} (mode 600).")
+
+
+def create_openbao_files(values: dict[str, str]) -> None:
+    """Pre-create OpenBao bind-mount targets.
+
+    Docker creates a directory when a bind-mount source file is missing, which
+    would silently shadow the token file the framework reads. These files must
+    exist as files before `docker compose up`.
+    """
+    token_path = Path(values["OPENBAO_TOKEN_FILE_PATH"])
+    init_path = Path(values["OPENBAO_INIT_FILE_PATH"])
+
+    for path in (token_path, init_path):
+        if path.is_dir():
+            log_error(
+                f"Expected a file but found a directory at {path}. "
+                "Remove it before re-running; Docker created it from a missing bind mount."
+            )
+            raise SystemExit(1)
+        run_cmd(["mkdir", "-p", str(path.parent)], sudo=True)
+        run_cmd(["touch", str(path)], sudo=True)
+
+    run_cmd(["chown", f"{values['AIRFLOW_UID']}:0", str(token_path)], sudo=True)
+    run_cmd(["chmod", "640", str(token_path)], sudo=True)
+    run_cmd(["chown", f"{EXPECTED_USER}:0", str(init_path)], sudo=True)
+    run_cmd(["chmod", "600", str(init_path)], sudo=True)
+    log_success("Prepared OpenBao token and init file bind mounts.")
 
 
 def verify_user(yes: bool) -> None:
@@ -266,6 +359,7 @@ def create_directories(values: dict[str, str]) -> None:
         values["INGESTION_STATE_PATH"],
         values["MINIO_DATA_PATH"],
         values["MINIO_CERTS_PATH"],
+        values["OPENBAO_DATA_PATH"],
         str(Path(values["OPENBAO_TOKEN_FILE_PATH"]).parent),
     ]
     for path in paths:
@@ -277,9 +371,216 @@ def create_directories(values: dict[str, str]) -> None:
     log_success("Created and permissioned platform directories.")
 
 
-def write_generated_scripts() -> None:
+def write_openbao_config(generated: Path, values: dict[str, str]) -> None:
+    """Write the OpenBao server config.
+
+    This file must stay free of secrets: the container entrypoint drops to the
+    unprivileged `openbao` user before reading it, so it cannot be root-only.
+    The static seal key is supplied through OPENBAO_UNSEAL_KEY instead.
+    """
+    seal_stanza = ""
+    if values["OPENBAO_SEAL_MODE"] == "static":
+        seal_stanza = f"""
+seal "static" {{
+  current_key_id = "{values['OPENBAO_UNSEAL_KEY_ID']}"
+  current_key    = "env://OPENBAO_UNSEAL_KEY"
+}}
+"""
+
+    config = generated / "openbao.hcl"
+    config.write_text(
+        f"""# Generated by deploy/single-node-airflow/install_platform.py. Do not edit by hand.
+ui = true
+
+storage "raft" {{
+  path    = "/openbao/data"
+  node_id = "ingestion-single-node"
+}}
+
+listener "tcp" {{
+  address     = "0.0.0.0:8200"
+  tls_disable = 1
+}}
+
+api_addr     = "http://openbao:8200"
+cluster_addr = "http://openbao:8201"
+{seal_stanza}"""
+    )
+    config.chmod(0o644)
+
+
+def write_openbao_bootstrap(generated: Path) -> None:
+    bootstrap = generated / "openbao-bootstrap.sh"
+    bootstrap.write_text(
+        r"""#!/bin/sh
+set -eu
+
+INIT_FILE=/run/openbao/init.json
+TOKEN_FILE=/run/openbao/ingestion.token
+POLICY_FILE=/tmp/ingestion-policy.hcl
+
+log() {
+  echo "openbao-bootstrap: $*"
+}
+
+json_field() {
+  sed -n "s/.*\"$1\"[[:space:]]*:[[:space:]]*\"\([^\"]*\)\".*/\1/p" "$2" | head -n 1
+}
+
+status_flag() {
+  bao status -format=json 2>/dev/null | grep -qE "\"$1\"[[:space:]]*:[[:space:]]*true"
+}
+
+wait_for_api() {
+  attempt=0
+  while [ "$attempt" -lt 60 ]; do
+    set +e
+    bao status >/dev/null 2>&1
+    code=$?
+    set -e
+    # 0 = unsealed, 2 = sealed or uninitialized. Both prove the API answered.
+    if [ "$code" -eq 0 ] || [ "$code" -eq 2 ]; then
+      return 0
+    fi
+    attempt=$((attempt + 1))
+    sleep 2
+  done
+  log "ERROR: OpenBao at $BAO_ADDR did not respond in time."
+  return 1
+}
+
+seed_if_absent() {
+  secret_path="$1"
+  shift
+  if bao kv get -mount="$OPENBAO_KV_MOUNT" "$secret_path" >/dev/null 2>&1; then
+    log "Secret already present, leaving unchanged: $OPENBAO_KV_MOUNT/$secret_path"
+    return 0
+  fi
+  bao kv put -mount="$OPENBAO_KV_MOUNT" "$secret_path" "$@" >/dev/null
+  log "Seeded secret: $OPENBAO_KV_MOUNT/$secret_path"
+}
+
+wait_for_api
+
+if status_flag initialized; then
+  log "OpenBao is already initialized."
+else
+  log "Initializing OpenBao."
+  if [ "$OPENBAO_SEAL_MODE" = "static" ]; then
+    bao operator init \
+      -recovery-shares="$OPENBAO_RECOVERY_SHARES" \
+      -recovery-threshold="$OPENBAO_RECOVERY_THRESHOLD" \
+      -format=json > "$INIT_FILE"
+  else
+    bao operator init \
+      -key-shares="$OPENBAO_RECOVERY_SHARES" \
+      -key-threshold="$OPENBAO_RECOVERY_THRESHOLD" \
+      -format=json > "$INIT_FILE"
+  fi
+  chmod 600 "$INIT_FILE" 2>/dev/null || true
+  log "Initialized. Back up $INIT_FILE now: it holds the root token and recovery keys."
+fi
+
+attempt=0
+while status_flag sealed; do
+  if [ "$OPENBAO_SEAL_MODE" = "static" ]; then
+    if [ "$attempt" -ge 30 ]; then
+      log "ERROR: auto-unseal did not complete. Check 'docker compose logs openbao'."
+      log "A changed OPENBAO_UNSEAL_KEY cannot decrypt existing storage."
+      exit 1
+    fi
+  else
+    if [ "$attempt" -eq 0 ]; then
+      log "Shamir mode: unseal with 'docker compose exec openbao bao operator unseal'."
+      log "Unseal keys are in $INIT_FILE on the host."
+    fi
+    if [ "$attempt" -ge 150 ]; then
+      log "ERROR: OpenBao is still sealed."
+      log "Unseal it, then re-run: docker compose up openbao-bootstrap"
+      exit 1
+    fi
+  fi
+  attempt=$((attempt + 1))
+  sleep 2
+done
+log "OpenBao is unsealed."
+
+BAO_TOKEN="$(json_field root_token "$INIT_FILE")"
+if [ -z "$BAO_TOKEN" ]; then
+  log "ERROR: no root token found in $INIT_FILE, so OpenBao cannot be configured."
+  log "Restore that file from backup, or re-initialize from empty storage."
+  exit 1
+fi
+export BAO_TOKEN
+
+if bao secrets list -format=json | grep -q "\"$OPENBAO_KV_MOUNT/\""; then
+  log "KV v2 already enabled at $OPENBAO_KV_MOUNT/"
+else
+  bao secrets enable -path="$OPENBAO_KV_MOUNT" kv-v2 >/dev/null
+  log "Enabled KV v2 at $OPENBAO_KV_MOUNT/"
+fi
+
+cat > "$POLICY_FILE" <<EOF
+path "$OPENBAO_KV_MOUNT/data/$OPENBAO_SECRET_PREFIX/*" {
+  capabilities = ["read"]
+}
+
+path "$OPENBAO_KV_MOUNT/metadata/$OPENBAO_SECRET_PREFIX/*" {
+  capabilities = ["read", "list"]
+}
+EOF
+bao policy write "$OPENBAO_POLICY_NAME" "$POLICY_FILE" >/dev/null
+rm -f "$POLICY_FILE"
+log "Applied read-only policy $OPENBAO_POLICY_NAME for $OPENBAO_SECRET_PREFIX/*"
+
+seed_if_absent "$OPENBAO_SECRET_PREFIX/minio" \
+  "access_key=$MINIO_ROOT_USER" \
+  "secret_key=$MINIO_ROOT_PASSWORD"
+seed_if_absent "$OPENBAO_SECRET_PREFIX/audit" \
+  "url=postgresql+psycopg2://$INGESTION_DB_USER:$INGESTION_DB_PASSWORD@postgres:5432/$INGESTION_DB_NAME"
+
+if [ -s "$TOKEN_FILE" ] && BAO_TOKEN="$(cat "$TOKEN_FILE")" bao token lookup >/dev/null 2>&1; then
+  log "Existing ingestion token is still valid."
+else
+  bao token create \
+    -policy="$OPENBAO_POLICY_NAME" \
+    -period="$OPENBAO_TOKEN_PERIOD" \
+    -orphan \
+    -format=json > /tmp/token.json
+  issued="$(json_field client_token /tmp/token.json)"
+  rm -f /tmp/token.json
+  if [ -z "$issued" ]; then
+    log "ERROR: could not parse the issued ingestion token."
+    exit 1
+  fi
+  # Truncate in place. Replacing the file would detach it from the bind mount.
+  printf '%s\n' "$issued" > "$TOKEN_FILE"
+  chown "$AIRFLOW_UID:0" "$TOKEN_FILE" 2>/dev/null || true
+  chmod 640 "$TOKEN_FILE" 2>/dev/null || true
+  log "Issued a periodic ingestion token ($OPENBAO_TOKEN_PERIOD) at $TOKEN_FILE"
+fi
+
+if BAO_TOKEN="$(cat "$TOKEN_FILE")" bao kv get \
+  -mount="$OPENBAO_KV_MOUNT" \
+  -field=access_key \
+  "$OPENBAO_SECRET_PREFIX/minio" >/dev/null 2>&1; then
+  log "Verified the ingestion token can read its secrets."
+else
+  log "ERROR: the ingestion token cannot read $OPENBAO_KV_MOUNT/$OPENBAO_SECRET_PREFIX/minio"
+  exit 1
+fi
+
+log "Bootstrap complete."
+"""
+    )
+    bootstrap.chmod(0o755)
+
+
+def write_generated_scripts(values: dict[str, str]) -> None:
     generated = DEPLOY_DIR / "generated"
     generated.mkdir(exist_ok=True)
+    write_openbao_config(generated, values)
+    write_openbao_bootstrap(generated)
 
     postgres_init_dir = generated / "postgres-init"
     postgres_init_dir.mkdir(exist_ok=True)
@@ -356,7 +657,7 @@ airflow variables set ingestion_minio_endpoint "${MINIO_SCHEME}://minio:9000"
 """,
     )
     airflow_bootstrap.chmod(0o755)
-    log_success("Generated Postgres, MinIO, and Airflow bootstrap scripts.")
+    log_success("Generated OpenBao, Postgres, MinIO, and Airflow bootstrap scripts.")
 
 
 def sync_ingestion_dags(values: dict[str, str]) -> None:
@@ -385,6 +686,11 @@ def main() -> int:
     parser.add_argument("--skip-mount-check", action="store_true", help="Do not require /mnt paths to be mounted.")
     parser.add_argument("--rotate-secrets", action="store_true", help="Regenerate all generated secrets.")
     parser.add_argument(
+        "--openbao-shamir",
+        action="store_true",
+        help="Use Shamir seal instead of static auto-unseal. Requires a manual unseal after every restart.",
+    )
+    parser.add_argument(
         "--sync-dags-only",
         action="store_true",
         help="Copy generated DAGs to the configured Airflow DAG folder and exit.",
@@ -408,16 +714,24 @@ def main() -> int:
         log_warning("Skipping Docker installation by request.")
     else:
         install_docker()
-    values = build_env(args.rotate_secrets)
+    values = build_env(args.rotate_secrets, "shamir" if args.openbao_shamir else None)
     write_env(DEPLOY_DIR / ".env", values)
     create_directories(values)
-    write_generated_scripts()
+    write_openbao_unseal_env(values, args.rotate_secrets)
+    create_openbao_files(values)
+    write_generated_scripts(values)
     sync_ingestion_dags(values)
     compose_config()
 
     log_success("Bootstrap files and directories are ready.")
     print(f"Next: cd {DEPLOY_DIR} && docker compose --env-file .env up -d --build")
     print(f"Airflow admin: {values['AIRFLOW_ADMIN_USERNAME']} / see deploy/single-node-airflow/.env")
+    if values["OPENBAO_SEAL_MODE"] == "shamir":
+        print(
+            "OpenBao uses Shamir seal mode: unseal manually after every restart "
+            "before ingestion DAGs can read secrets."
+        )
+    print(f"Back up {values['OPENBAO_INIT_FILE_PATH']} after first start: it holds OpenBao recovery keys.")
     return 0
 
 
