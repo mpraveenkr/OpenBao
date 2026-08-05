@@ -395,7 +395,7 @@ class FakeOpenBaoSession:
     def __init__(self, payload):
         self.payload = payload
 
-    def get(self, url, headers=None, timeout=None):
+    def get(self, url, headers=None, timeout=None, verify=True):
         return FakeResponse(self.payload)
 
 
