@@ -15,7 +15,9 @@ The long-term flow is:
 7. Create a manifest next to the data files.
 8. Commit audit status and watermarks only after successful target write.
 
-Secrets are not stored in YAML. Local development uses SQLite for audit/watermark state and local filesystem storage.
+Secrets are not stored in YAML. Configs hold OpenBao references, which the
+framework resolves at runtime. Local development uses SQLite for audit/watermark
+state and local filesystem storage.
 
 ## Current MVP
 
@@ -34,16 +36,19 @@ Implemented in this milestone:
 - CLI command for one source object.
 - Pytest coverage for config, normalization, type mapping, CSV extraction, security validation, and full local ingestion.
 
+## Delivered Since The MVP
+
+- Database extractor, including SQL Server metadata-driven schema discovery.
+- API extractor with pagination, parameter sets, and JSON flattening.
+- S3-compatible writer for MinIO and Nutanix Objects.
+- Azure Data Lake Storage Gen2 writer, authenticating with an Entra ID service principal or an account key.
+- Postgres-backed audit and watermark stores.
+- Airflow DAG generator and a single-node Airflow deployment.
+- OpenBao-backed secret resolution, with the server deployed and provisioned as part of that stack.
+
 ## Future Phases
 
-Phase 2: database extractor.
-
-Phase 3: API extractor.
-
-Phase 4: S3 and Nutanix Objects writer through S3-compatible APIs.
-
-Phase 5: Azure Data Lake Storage Gen2 writer.
-
-Phase 6: Airflow wrapper.
-
-Phase 7: Azure Data Factory/container execution.
+- Encryption and masking enforcement, which the security metadata currently records but does not apply.
+- Azure Data Factory or container-based execution as an alternative to Airflow.
+- Moving platform bootstrap secrets for Postgres, MinIO, and Airflow into OpenBao.
+- TLS on the OpenBao listener, with AppRole replacing the static periodic token.

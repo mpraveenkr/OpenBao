@@ -162,6 +162,64 @@ username_secret_ref: openbao:secret/data/ingestion-framework/database/itron_mv90
 password_secret_ref: openbao:secret/data/ingestion-framework/database/itron_mv90_sqlserver_readonly#password
 ```
 
+## Target Storage
+
+Three storage backends are supported, selected by the `type` field of each
+entry in the storage config and referenced by a source object's
+`target.storage_name`:
+
+| `type` | Backend | Config |
+| --- | --- | --- |
+| `local` | Local filesystem | `configs/storage.yaml` |
+| `s3_compatible` | MinIO, Nutanix Objects, S3 | `configs/storage_minio.yaml` |
+| `adls_gen2` | Azure Data Lake Storage Gen2 | `configs/storage_adls.yaml` |
+
+### Azure Data Lake Storage Gen2
+
+The ADLS Gen2 writer authenticates with either an Entra ID service principal
+(the default) or a storage account key, and writes to
+`abfss://<filesystem>@<account>.dfs.core.windows.net/<prefix>/<path>`.
+
+```yaml
+# configs/storage_adls.yaml
+storages:
+  adls_bronze:
+    type: adls_gen2
+    account_name: examplecompanydatalake
+    filesystem: bronze
+    base_prefix: bronze
+    auth_method: service_principal
+    tenant_id: 00000000-0000-0000-0000-000000000000
+    client_id: 11111111-1111-1111-1111-111111111111
+    client_secret_ref: openbao:secret/data/ingestion-framework/adls#client_secret
+    encryption:
+      supported: true
+      mode: microsoft_managed
+```
+
+`tenant_id` and `client_id` are identifiers, so they may be written inline or
+given as OpenBao references. The client secret must be an OpenBao reference, so
+a usable credential cannot be committed to a config file. Seed it before first
+use:
+
+```bash
+bao kv put -mount=secret ingestion-framework/adls \
+  client_secret='<service-principal-secret>'
+```
+
+For account key auth instead, set `auth_method: account_key` and
+`account_key_ref`.
+
+The service principal needs the **Storage Blob Data Contributor** role on the
+filesystem. Because ADLS Gen2 encrypts at rest by default, this backend can
+accept BCSI-classified sources, which local unencrypted storage cannot.
+
+Verify the credentials resolve before running a pipeline:
+
+```bash
+ingest-object check-secrets --storage configs/storage_adls.yaml
+```
+
 ## Airflow DAG Generation
 
 Generate the safe default subset:
@@ -170,7 +228,16 @@ Generate the safe default subset:
 python tools/generate_airflow_dags.py --validate
 ```
 
-The generator defaults to the `single-node-airflow` profile and writes DAGs under `deploy/single-node-airflow/dags/generated/`. Generated DAGs call the existing CLI and use Postgres-backed audit/watermark state through:
+The generator defaults to the `single-node-airflow` profile, which targets
+MinIO. To generate DAGs that write to Azure Data Lake instead:
+
+```bash
+python tools/generate_airflow_dags.py --profile single-node-airflow-adls --validate
+```
+
+Either profile can be overridden for one run with `--storage`.
+
+The generator writes DAGs under `deploy/single-node-airflow/dags/generated/`. Generated DAGs call the existing CLI and use Postgres-backed audit/watermark state through:
 
 ```bash
 --audit-db env:INGESTION_AUDIT_DB_URL
