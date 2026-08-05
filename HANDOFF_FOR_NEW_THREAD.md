@@ -284,6 +284,10 @@ secret_key_ref: openbao:secret/data/ingestion-framework/minio#secret_key
 
 The runtime needs `OPENBAO_ADDR` and preferably `OPENBAO_TOKEN_FILE`.
 
+The single-node Compose stack now runs OpenBao itself and provisions it on
+startup, including the policy, the Airflow token, and the MinIO and audit
+secrets. See `deploy/single-node-airflow/README.md`.
+
 ## Single-Node Airflow Deployment
 
 Deployment folder:

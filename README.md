@@ -113,6 +113,33 @@ For KV v2, include `data/` in the path. Configure the runtime with
 and `VAULT_TOKEN` are supported for local development but are not the preferred
 deployment pattern.
 
+When OpenBao is served over TLS, point the framework at the issuing CA with
+`OPENBAO_CACERT`. Verification is on by default and is only skipped when
+`OPENBAO_SKIP_VERIFY` is set explicitly.
+
+Secrets are cached per path for the life of a process, so a config that reads
+several fields of one secret costs a single request. Connection failures and
+transient 5xx responses are retried a few times; permission and not-found
+errors are not.
+
+The single-node Airflow deployment runs and provisions its own OpenBao server.
+See `deploy/single-node-airflow/README.md`.
+
+### Verifying secret references
+
+Resolve every secret a config needs, without printing any values:
+
+```bash
+ingest-object check-secrets \
+  --config configs/sources/api_generated/pjm_load_forecast.yaml \
+  --storage configs/storage_minio.yaml \
+  --audit-db env:INGESTION_AUDIT_DB_URL
+```
+
+Each reference is reported as `OK` or `FAIL`, and the command exits non-zero if
+any fails. Every argument is optional, so a storage config or a single audit
+reference can be checked on its own.
+
 Examples:
 
 ```yaml
