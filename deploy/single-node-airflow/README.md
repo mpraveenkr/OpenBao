@@ -284,6 +284,48 @@ If your build environment cannot reach Microsoft package repositories, you can t
 INSTALL_MSSQL_ODBC=false
 ```
 
+## Troubleshooting
+
+### `pull access denied for vt-airflow-ingestion`
+
+The Airflow image is built from this repository and never pushed to a registry,
+so Compose can only obtain it by building. All three Airflow services declare
+the same `build:` config for that reason. If you see this error, the image was
+not built, usually because the build itself failed earlier in the output.
+
+Build on its own to see the real error:
+
+```bash
+docker compose --env-file .env build
+```
+
+The build needs to reach `raw.githubusercontent.com` for the Airflow constraints
+file, PyPI, and, unless disabled, the Microsoft ODBC package repository. If your
+network blocks the Microsoft repository, turn that part off in `.env` and
+rebuild:
+
+```bash
+INSTALL_MSSQL_ODBC=false
+```
+
+Confirm the image exists before starting the stack:
+
+```bash
+docker images vt-airflow-ingestion
+```
+
+### Airflow containers cannot read the OpenBao token
+
+Check that the bootstrap finished:
+
+```bash
+docker compose logs openbao-bootstrap
+```
+
+A successful run ends with `Bootstrap complete.` If the token path is a
+directory rather than a file, Docker created it from a missing bind mount;
+remove it and re-run `python3 install_platform.py`.
+
 ## Smoke test
 
 After the stack is running, open Airflow and trigger:

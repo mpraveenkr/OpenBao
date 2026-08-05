@@ -207,6 +207,40 @@ def test_compose_bootstrap_mounts_token_and_init_files(compose):
     assert "${OPENBAO_INIT_FILE_PATH}:/run/openbao/init.json" in volumes
 
 
+def test_every_service_using_a_locally_built_image_can_build_it(compose):
+    """Guard against Compose trying to pull an image that is only built here.
+
+    vt-airflow-ingestion is never pushed to a registry. A service that names it
+    without a build config makes Compose resolve it by pulling, which fails with
+    "pull access denied for vt-airflow-ingestion".
+    """
+    services = compose["services"]
+    locally_built = {
+        service["image"] for service in services.values() if "build" in service
+    }
+
+    pullers = [
+        name
+        for name, service in services.items()
+        if service.get("image") in locally_built and "build" not in service
+    ]
+
+    assert pullers == []
+
+
+def test_all_airflow_services_share_one_build_definition(compose):
+    # Differing build configs for one tag would make Compose build it more than
+    # once, and the services could end up on different images.
+    services = compose["services"]
+    builds = [
+        services[name]["build"]
+        for name in ("airflow-init", "airflow-scheduler", "airflow-webserver")
+    ]
+
+    assert builds[0] == builds[1] == builds[2]
+    assert builds[0]["dockerfile"] == "deploy/single-node-airflow/Dockerfile.airflow"
+
+
 def test_compose_variables_are_all_produced_by_the_installer(install_platform):
     raw = COMPOSE_PATH.read_text()
     produced = (

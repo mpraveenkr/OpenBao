@@ -127,7 +127,11 @@ services:
     restart: "no"
 
   airflow-init:
-    build:
+    # Every service using this image repeats the build config. The image is only
+    # ever built locally and never pushed, so a service that names it without
+    # knowing how to build it makes Compose try to pull it, which fails with
+    # "pull access denied". Compose builds once and reuses it for the rest.
+    build: &airflow-build
       context: ../..
       dockerfile: deploy/single-node-airflow/Dockerfile.airflow
       args:
@@ -179,6 +183,7 @@ services:
     restart: "no"
 
   airflow-scheduler:
+    build: *airflow-build
     image: vt-airflow-ingestion:single-node
     container_name: ingestion_airflow_scheduler
     depends_on:
@@ -196,6 +201,7 @@ services:
       retries: 5
 
   airflow-webserver:
+    build: *airflow-build
     image: vt-airflow-ingestion:single-node
     container_name: ingestion_airflow_webserver
     depends_on:
