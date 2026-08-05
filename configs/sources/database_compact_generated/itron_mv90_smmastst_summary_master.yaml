@@ -1,0 +1,109 @@
+object_id: itron_mv90_smmastst_summary_master
+source_system: itron_mv90
+source_type: database
+object_name: smmastst_summary_master
+enabled: true
+load_strategy: incremental
+extraction:
+  db_type: sql_server
+  connection_name: itron_mv90_sqlserver_readonly
+  database_name: MV90
+  schema_name: dbo
+  table_name: SMMASTST
+  query: SELECT * FROM dbo.SMMASTST WHERE LOAD_TSTZ > :last_watermark
+  incremental_column: load_tstz
+  watermark_type: timestamp
+  watermark:
+    column: load_tstz
+    operator: '>'
+    initial_value: '1900-01-01T00:00:00Z'
+    value_type: timestamp
+    timezone: UTC
+    commit_rule: max_extracted_value_after_successful_write
+    late_arriving_overlap: 0 minutes
+schema_policy:
+  mode: hybrid
+  column_case: snake_case
+  replace_spaces_with: _
+  allow_schema_evolution: true
+  include_unmodeled_columns: true
+  infer_types: true
+  column_discovery: source_metadata
+  type_discovery: source_metadata
+schema:
+  columns:
+    summaryid:
+      type: string
+      nullable: false
+      mask_policy: none
+      source_column_name: SUMMARYID
+    custid:
+      type: string
+      nullable: false
+      mask_policy: none
+      source_column_name: CUSTID
+    contributorid:
+      type: string
+      nullable: false
+      mask_policy: none
+      source_column_name: CONTRIBUTORID
+    chanid:
+      type: integer
+      nullable: false
+      mask_policy: none
+      source_column_name: CHANID
+    activedate:
+      type: string
+      nullable: false
+      mask_policy: none
+      source_column_name: ACTIVEDATE
+    confidencelevel:
+      type: decimal
+      nullable: true
+      mask_policy: none
+      source_column_name: CONFIDENCELEVEL
+    fpc_flag:
+      type: string
+      nullable: true
+      mask_policy: none
+      source_column_name: FPC_FLAG
+    load_tstz:
+      type: timestamp
+      nullable: false
+      mask_policy: none
+      source_column_name: LOAD_TSTZ
+target:
+  storage_name: itron_mv90_bronze
+  zone: bronze
+  format: parquet
+  write_mode: append
+  compression: snappy
+  partition_by:
+  - ingest_year
+  - ingest_month
+  - ingest_day
+audit:
+  dq_checks:
+  - row_count_gt_zero
+  - composite_pk_not_null
+  - composite_pk_unique
+  - rowid_unique
+  - load_tstz_not_null
+  - custid_fk_check
+  - contributorid_fk_check
+  - chanid_positive
+  - etl_batch_nbr_not_null
+  primary_key:
+  - summaryid
+  - custid
+  - contributorid
+  - chanid
+  - activedate
+security:
+  classification: confidential
+  contains_bcsi: false
+  contains_pii: false
+  encryption_required: true
+  masking_required: false
+  raw_payload_retention_days: 365
+  access_group: itron_mv90_analytics_data_readers

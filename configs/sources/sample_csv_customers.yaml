@@ -1,0 +1,63 @@
+object_id: sample_csv_customers
+source_system: sample_files
+source_type: file
+object_name: customers
+enabled: true
+load_strategy: full
+
+extraction:
+  file_type: csv
+  path: data/input/customers.csv
+  delimiter: ","
+  header: true
+  encoding: utf-8
+
+schema_policy:
+  column_case: snake_case
+  replace_spaces_with: "_"
+  allow_schema_evolution: true
+
+schema:
+  columns:
+    customer_id:
+      type: string
+      nullable: false
+      mask_policy: none
+    customer_name:
+      type: string
+      nullable: true
+      mask_policy: none
+    created_date:
+      type: date
+      nullable: true
+      mask_policy: none
+    updated_timestamp:
+      type: timestamp
+      nullable: true
+      mask_policy: none
+
+target:
+  storage_name: local_bronze
+  zone: bronze
+  format: parquet
+  write_mode: append
+  compression: snappy
+  partition_by:
+    - ingest_year
+    - ingest_month
+    - ingest_day
+
+audit:
+  dq_checks:
+    - row_count_gt_zero
+  primary_key:
+    - customer_id
+
+security:
+  classification: internal
+  contains_bcsi: false
+  contains_pii: false
+  encryption_required: false
+  masking_required: false
+  raw_payload_retention_days: 30
+  access_group: local_ingestion_developers

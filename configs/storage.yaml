@@ -1,0 +1,7 @@
+storages:
+  local_bronze:
+    type: local
+    base_path: data/output
+    encryption:
+      supported: false
+      mode: none

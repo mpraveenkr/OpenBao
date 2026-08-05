@@ -1,0 +1,292 @@
+object_id: weather_archive
+source_system: open_meteo
+source_type: api
+object_name: weather_archive
+enabled: true
+load_strategy: full
+extraction:
+  base_url: https://archive-api.open-meteo.com/v1
+  endpoint: /archive
+  method: GET
+  auth_type: none
+  pagination:
+    type: none
+  query_parameters:
+    latitude:
+      value_template: '{latitude}'
+      type: float
+      required: true
+      notes: Resolved from active station parameter set row.
+    longitude:
+      value_template: '{longitude}'
+      type: float
+      required: true
+      notes: Resolved from active station parameter set row.
+    daily:
+      value_template: shortwave_radiation_sum
+      type: string
+      required: true
+      notes: Static daily variable.
+    hourly:
+      value_template: temperature_2m,relative_humidity_2m,dew_point_2m,rain,precipitation,snowfall,cloud_cover,cloud_cover_low,cloud_cover_mid,cloud_cover_high,wind_speed_10m,apparent_temperature,shortwave_radiation
+      type: string
+      required: true
+      notes: Static hourly variable list.
+    current:
+      value_template: apparent_temperature
+      type: string
+      required: true
+      notes: Static current variable.
+    start_date:
+      value_template: '{start_date}'
+      type: date
+      required: true
+      notes: Runtime current date.
+    end_date:
+      value_template: '{end_date}'
+      type: date
+      required: true
+      notes: Runtime current date plus 15 days.
+  runtime_parameters:
+  - name: latitude
+    location: query
+    placeholder: '{latitude}'
+    type: float
+    required: true
+    default_strategy: parameter_set_value
+    notes: Resolved from Parameter_Sets CSV row.
+  - name: longitude
+    location: query
+    placeholder: '{longitude}'
+    type: float
+    required: true
+    default_strategy: parameter_set_value
+    notes: Resolved from Parameter_Sets CSV row.
+  - name: start_date
+    location: query
+    placeholder: '{start_date}'
+    type: date
+    required: true
+    default_strategy: current_date
+    timezone: UTC
+    format: yyyy-MM-dd
+    offset_days: -900
+    notes: Resolved at runtime as current date minus 900 days.
+  - name: end_date
+    location: query
+    placeholder: '{end_date}'
+    type: date
+    required: true
+    default_strategy: current_date
+    timezone: UTC
+    format: yyyy-MM-dd
+    offset_days: 0
+    notes: Resolved at runtime as current date.
+  parameter_sets:
+  - set_name: miso_stations
+    type: file
+    file_type: csv
+    path: data/input/miso_stations.csv
+    mode: one_request_per_row
+    max_concurrency: 1
+    fail_fast: false
+    columns:
+    - column_name: val_lat
+      type: float
+      required: true
+      maps_to: runtime.latitude
+      notes: Read from miso_stations.csv and used as query latitude.
+    - column_name: val_lon
+      type: float
+      required: true
+      maps_to: runtime.longitude
+      notes: Read from miso_stations.csv and used as query longitude.
+    notes: Iterate once for each MISO station row. Uses latitude/longitude columns.
+  - set_name: pjm_stations
+    type: file
+    file_type: csv
+    path: data/input/pjm_stations.csv
+    mode: one_request_per_row
+    max_concurrency: 1
+    fail_fast: false
+    columns:
+    - column_name: val_lat
+      type: float
+      required: true
+      maps_to: runtime.latitude
+      notes: Read from pjm_stations.csv and used as query latitude.
+    - column_name: val_lon
+      type: float
+      required: true
+      maps_to: runtime.longitude
+      notes: Read from pjm_stations.csv and used as query longitude.
+    notes: Iterate once for each PJM station row. Uses latitude/longitude columns.
+  response_shape: timeseries_arrays
+  time_path: $.hourly.time[*]
+  array_parent_path: $.hourly
+  metadata_paths:
+  - latitude
+  - longitude
+  - elevation
+  - timezone
+  - timezone_abbreviation
+  daily_parent_path: $.daily
+  rate_limit_per_minute: 60
+  timeout_seconds: 30
+  retry_count: 3
+schema_policy:
+  mode: hybrid
+  response_shape: timeseries_arrays
+  flatten_json: true
+  nested_field_separator: _
+  column_case: snake_case
+  include_unmodeled_columns: true
+  allow_schema_evolution: true
+schema:
+  columns:
+    dt_as_of:
+      type: date
+      nullable: false
+      mask_policy: none
+      source_json_path: $.daily.time[*]
+      description: Forecast date from daily time array or run date.
+    tm_start:
+      type: timestamp
+      nullable: false
+      mask_policy: none
+      source_json_path: $.hourly.time[*]
+      description: Hourly forecast timestamp.
+    val_latitude:
+      type: float
+      nullable: false
+      mask_policy: none
+      source_json_path: $.latitude
+      description: Latitude returned by API.
+    val_longitude:
+      type: float
+      nullable: false
+      mask_policy: none
+      source_json_path: $.longitude
+      description: Longitude returned by API.
+    val_elevation:
+      type: float
+      nullable: true
+      mask_policy: none
+      source_json_path: $.elevation
+      description: Elevation returned by API.
+    val_timezone:
+      type: string
+      nullable: true
+      mask_policy: none
+      source_json_path: $.timezone
+      description: Timezone returned by API.
+    val_timezone_abbreviation:
+      type: string
+      nullable: true
+      mask_policy: none
+      source_json_path: $.timezone_abbreviation
+      description: Timezone abbreviation returned by API.
+    val_temperature_2m:
+      type: float
+      nullable: true
+      mask_policy: none
+      source_json_path: $.hourly.temperature_2m[*]
+      description: Hourly temperature at 2m.
+    val_relative_humidity_2m:
+      type: float
+      nullable: true
+      mask_policy: none
+      source_json_path: $.hourly.relative_humidity_2m[*]
+      description: Hourly relative humidity at 2m.
+    val_dew_point_2m:
+      type: float
+      nullable: true
+      mask_policy: none
+      source_json_path: $.hourly.dew_point_2m[*]
+      description: Hourly dew point at 2m.
+    val_precipitation:
+      type: float
+      nullable: true
+      mask_policy: none
+      source_json_path: $.hourly.precipitation[*]
+      description: Hourly precipitation.
+    val_rain:
+      type: float
+      nullable: true
+      mask_policy: none
+      source_json_path: $.hourly.rain[*]
+      description: Hourly rain.
+    val_snowfall:
+      type: float
+      nullable: true
+      mask_policy: none
+      source_json_path: $.hourly.snowfall[*]
+      description: Hourly snowfall.
+    val_cloud_cover:
+      type: float
+      nullable: true
+      mask_policy: none
+      source_json_path: $.hourly.cloud_cover[*]
+      description: Hourly total cloud cover.
+    val_cloud_cover_low:
+      type: float
+      nullable: true
+      mask_policy: none
+      source_json_path: $.hourly.cloud_cover_low[*]
+      description: Hourly low cloud cover.
+    val_cloud_cover_mid:
+      type: float
+      nullable: true
+      mask_policy: none
+      source_json_path: $.hourly.cloud_cover_mid[*]
+      description: Hourly mid cloud cover.
+    val_cloud_cover_high:
+      type: float
+      nullable: true
+      mask_policy: none
+      source_json_path: $.hourly.cloud_cover_high[*]
+      description: Hourly high cloud cover.
+    val_wind_speed_10m:
+      type: float
+      nullable: true
+      mask_policy: none
+      source_json_path: $.hourly.wind_speed_10m[*]
+      description: Hourly wind speed at 10m.
+    val_apparent_temperature:
+      type: float
+      nullable: true
+      mask_policy: none
+      source_json_path: $.hourly.apparent_temperature[*]
+      description: Current apparent temperature copied to each row.
+    val_shortwave_radiation:
+      type: float
+      nullable: true
+      mask_policy: none
+      source_json_path: $.hourly.shortwave_radiation[*]
+      description: Daily shortwave radiation sum joined by date.
+target:
+  storage_name: minio_bronze
+  zone: bronze
+  format: parquet
+  write_mode: append
+  compression: snappy
+  partition_by:
+  - ingest_year
+  - ingest_month
+  - ingest_day
+audit:
+  dq_checks:
+  - row_count_gt_zero
+  primary_key:
+  - dt_as_of
+  - tm_start
+  - val_latitude
+  - val_longitude
+security:
+  classification: internal
+  contains_bcsi: false
+  contains_pii: false
+  encryption_required: false
+  masking_required: false
+  raw_payload_retention_days: 30
+  access_group: data_platform_users

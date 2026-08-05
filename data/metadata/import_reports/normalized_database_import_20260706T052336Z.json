@@ -1,0 +1,1323 @@
+{
+  "created_at_utc": "2026-07-06T05:23:36.609919+00:00",
+  "dry_run": false,
+  "failures": [],
+  "input": "templates/generated_compact_database_templates/Lawson_GEN_Historical_SQL_Server_compact.xlsx",
+  "limit": null,
+  "metadata_db": null,
+  "metadata_upserts": 0,
+  "objects_processed": 187,
+  "output_dir": "configs/sources/database_compact_generated",
+  "successes": [
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_atfmid",
+      "object_name": "ATFMID",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_atfmid.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_bcaccpath",
+      "object_name": "BCACCPATH",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_bcaccpath.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_bcassoc",
+      "object_name": "BCASSOC",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_bcassoc.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_bcattrib",
+      "object_name": "BCATTRIB",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_bcattrib.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_bcdef",
+      "object_name": "BCDEF",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_bcdef.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_bcinterfac",
+      "object_name": "BCINTERFAC",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_bcinterfac.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_bcmethod",
+      "object_name": "BCMETHOD",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_bcmethod.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_btmeth",
+      "object_name": "BTMETH",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_btmeth.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_calendar",
+      "object_name": "CALENDAR",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_calendar.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_calyear",
+      "object_name": "CALYEAR",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_calyear.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_cfkeynbr",
+      "object_name": "CFKEYNBR",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_cfkeynbr.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_cndfld",
+      "object_name": "CNDFLD",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_cndfld.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_cndfldelm",
+      "object_name": "CNDFLDELM",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_cndfldelm.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_cobfile",
+      "object_name": "COBFILE",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_cobfile.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_cobfld",
+      "object_name": "COBFLD",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_cobfld.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_cobpath",
+      "object_name": "COBPATH",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_cobpath.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_crterrmap",
+      "object_name": "CRTERRMAP",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_crterrmap.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_dataid",
+      "object_name": "DATAID",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_dataid.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_dbenv",
+      "object_name": "DBENV",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_dbenv.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_dbspace",
+      "object_name": "DBSPACE",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_dbspace.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_ddldata",
+      "object_name": "DDLDATA",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_ddldata.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_docelm",
+      "object_name": "DOCELM",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_docelm.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_docfile",
+      "object_name": "DOCFILE",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_docfile.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_docfld",
+      "object_name": "DOCFLD",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_docfld.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_docscrfld",
+      "object_name": "DOCSCRFLD",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_docscrfld.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_doctxt",
+      "object_name": "DOCTXT",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_doctxt.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_dstgrp",
+      "object_name": "DSTGRP",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_dstgrp.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_dstgrpdtl",
+      "object_name": "DSTGRPDTL",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_dstgrpdtl.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_dstgrpgrp",
+      "object_name": "DSTGRPGRP",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_dstgrpgrp.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 1,
+      "object_id": "lawson_erp_gen_dstgrpuser",
+      "object_name": "DSTGRPUSER",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_dstgrpuser.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_element",
+      "object_name": "ELEMENT",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_element.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_elmgrp",
+      "object_name": "ELMGRP",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_elmgrp.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_executable",
+      "object_name": "EXECUTABLE",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_executable.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_exerpt",
+      "object_name": "EXERPT",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_exerpt.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_fileavf",
+      "object_name": "FILEAVF",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_fileavf.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_filecnd",
+      "object_name": "FILECND",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_filecnd.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_filecndelm",
+      "object_name": "FILECNDELM",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_filecndelm.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_filecpt",
+      "object_name": "FILECPT",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_filecpt.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_filecptfld",
+      "object_name": "FILECPTFLD",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_filecptfld.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_filedef",
+      "object_name": "FILEDEF",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_filedef.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_fileevent",
+      "object_name": "FILEEVENT",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_fileevent.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_filefld",
+      "object_name": "FILEFLD",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_filefld.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_filegrp",
+      "object_name": "FILEGRP",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_filegrp.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_filegrpfld",
+      "object_name": "FILEGRPFLD",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_filegrpfld.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_fileind",
+      "object_name": "FILEIND",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_fileind.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_fileindfld",
+      "object_name": "FILEINDFLD",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_fileindfld.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_fileloc",
+      "object_name": "FILELOC",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_fileloc.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_filemsg",
+      "object_name": "FILEMSG",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_filemsg.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_filepop",
+      "object_name": "FILEPOP",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_filepop.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_filerel",
+      "object_name": "FILEREL",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_filerel.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_filerelfld",
+      "object_name": "FILERELFLD",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_filerelfld.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_filerule",
+      "object_name": "FILERULE",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_filerule.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_filestate",
+      "object_name": "FILESTATE",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_filestate.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_filestrfld",
+      "object_name": "FILESTRFLD",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_filestrfld.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_filesumfld",
+      "object_name": "FILESUMFLD",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_filesumfld.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_filewrkfld",
+      "object_name": "FILEWRKFLD",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_filewrkfld.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_iledboccur",
+      "object_name": "ILEDBOCCUR",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_iledboccur.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_ileformat",
+      "object_name": "ILEFORMAT",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_ileformat.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_ilexlt",
+      "object_name": "ILEXLT",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_ilexlt.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_iscrel",
+      "object_name": "ISCREL",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_iscrel.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 1,
+      "object_id": "lawson_erp_gen_job",
+      "object_name": "JOB",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_job.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_jobqdflt",
+      "object_name": "JOBQDFLT",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_jobqdflt.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_jobqgrp",
+      "object_name": "JOBQGRP",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_jobqgrp.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_jobqgrpdtl",
+      "object_name": "JOBQGRPDTL",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_jobqgrpdtl.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_jobqueue",
+      "object_name": "JOBQUEUE",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_jobqueue.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 1,
+      "object_id": "lawson_erp_gen_jobstep",
+      "object_name": "JOBSTEP",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_jobstep.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 1,
+      "object_id": "lawson_erp_gen_jobsteprpt",
+      "object_name": "JOBSTEPRPT",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_jobsteprpt.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 1,
+      "object_id": "lawson_erp_gen_jobstepwrk",
+      "object_name": "JOBSTEPWRK",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_jobstepwrk.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_jscluster",
+      "object_name": "JSCLUSTER",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_jscluster.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_keynbrdef",
+      "object_name": "KEYNBRDEF",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_keynbrdef.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_library",
+      "object_name": "LIBRARY",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_library.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_librarywf",
+      "object_name": "LIBRARYWF",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_librarywf.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_libraryws",
+      "object_name": "LIBRARYWS",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_libraryws.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_librtn",
+      "object_name": "LIBRTN",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_librtn.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_locale",
+      "object_name": "LOCALE",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_locale.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_lstuseddrl",
+      "object_name": "LSTUSEDDRL",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_lstuseddrl.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 1,
+      "object_id": "lawson_erp_gen_machine",
+      "object_name": "MACHINE",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_machine.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_menucat",
+      "object_name": "MENUCAT",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_menucat.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_menuopt",
+      "object_name": "MENUOPT",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_menuopt.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_objectid",
+      "object_name": "OBJECTID",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_objectid.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_patch",
+      "object_name": "PATCH",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_patch.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_pgmcall",
+      "object_name": "PGMCALL",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_pgmcall.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_pgmerrcat",
+      "object_name": "PGMERRCAT",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_pgmerrcat.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_pgmfile",
+      "object_name": "PGMFILE",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_pgmfile.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_pgmfld",
+      "object_name": "PGMFLD",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_pgmfld.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_pgmlib",
+      "object_name": "PGMLIB",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_pgmlib.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_pgmset",
+      "object_name": "PGMSET",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_pgmset.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_phrase",
+      "object_name": "PHRASE",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_phrase.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_phraseuse",
+      "object_name": "PHRASEUSE",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_phraseuse.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_phrasexlt",
+      "object_name": "PHRASEXLT",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_phrasexlt.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_printer",
+      "object_name": "PRINTER",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_printer.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_prmfld",
+      "object_name": "PRMFLD",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_prmfld.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_prmscr",
+      "object_name": "PRMSCR",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_prmscr.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_procavf",
+      "object_name": "PROCAVF",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_procavf.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_proccnd",
+      "object_name": "PROCCND",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_proccnd.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_proccndref",
+      "object_name": "PROCCNDREF",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_proccndref.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_proccpt",
+      "object_name": "PROCCPT",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_proccpt.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_procrule",
+      "object_name": "PROCRULE",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_procrule.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_prodata",
+      "object_name": "PRODATA",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_prodata.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 1,
+      "object_id": "lawson_erp_gen_prodline",
+      "object_name": "PRODLINE",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_prodline.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_profield",
+      "object_name": "PROFIELD",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_profield.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_program",
+      "object_name": "PROGRAM",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_program.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_project",
+      "object_name": "PROJECT",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_project.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_prorow",
+      "object_name": "PROROW",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_prorow.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_protable",
+      "object_name": "PROTABLE",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_protable.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_prtgrp",
+      "object_name": "PRTGRP",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_prtgrp.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_prtgrpdtl",
+      "object_name": "PRTGRPDTL",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_prtgrpdtl.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 1,
+      "object_id": "lawson_erp_gen_queuedjob",
+      "object_name": "QUEUEDJOB",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_queuedjob.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 1,
+      "object_id": "lawson_erp_gen_recurjob",
+      "object_name": "RECURJOB",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_recurjob.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_rpgelm",
+      "object_name": "RPGELM",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_rpgelm.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_rpgfile",
+      "object_name": "RPGFILE",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_rpgfile.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_rpgfld",
+      "object_name": "RPGFLD",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_rpgfld.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_rpgpath",
+      "object_name": "RPGPATH",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_rpgpath.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_rpgsys",
+      "object_name": "RPGSYS",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_rpgsys.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_rpgxlt",
+      "object_name": "RPGXLT",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_rpgxlt.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_rptfld",
+      "object_name": "RPTFLD",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_rptfld.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_rptfmt",
+      "object_name": "RPTFMT",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_rptfmt.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_rptord",
+      "object_name": "RPTORD",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_rptord.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_rptproc",
+      "object_name": "RPTPROC",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_rptproc.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_r_language",
+      "object_name": "R_LANGUAGE",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_r_language.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 1,
+      "object_id": "lawson_erp_gen_r_user",
+      "object_name": "R_USER",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_r_user.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_scfkeynbr",
+      "object_name": "SCFKEYNBR",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_scfkeynbr.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_scrdef",
+      "object_name": "SCRDEF",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_scrdef.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_screen",
+      "object_name": "SCREEN",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_screen.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_screvt",
+      "object_name": "SCREVT",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_screvt.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_scrfld",
+      "object_name": "SCRFLD",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_scrfld.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_scrnxt",
+      "object_name": "SCRNXT",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_scrnxt.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_scrord",
+      "object_name": "SCRORD",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_scrord.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_secclass",
+      "object_name": "SECCLASS",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_secclass.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_skeynbrdef",
+      "object_name": "SKEYNBRDEF",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_skeynbrdef.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_slibrary",
+      "object_name": "SLIBRARY",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_slibrary.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_slibrtn",
+      "object_name": "SLIBRTN",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_slibrtn.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_spgmcall",
+      "object_name": "SPGMCALL",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_spgmcall.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_spgmerrcat",
+      "object_name": "SPGMERRCAT",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_spgmerrcat.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_spgmfile",
+      "object_name": "SPGMFILE",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_spgmfile.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_spgmfld",
+      "object_name": "SPGMFLD",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_spgmfld.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_spgmlib",
+      "object_name": "SPGMLIB",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_spgmlib.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_sprogram",
+      "object_name": "SPROGRAM",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_sprogram.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_srmoduser",
+      "object_name": "SRMODUSER",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_srmoduser.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_sscreen",
+      "object_name": "SSCREEN",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_sscreen.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_ssyskeynbr",
+      "object_name": "SSYSKEYNBR",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_ssyskeynbr.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_stgprodlst",
+      "object_name": "STGPRODLST",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_stgprodlst.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_stgproglst",
+      "object_name": "STGPROGLST",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_stgproglst.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_stitle",
+      "object_name": "STITLE",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_stitle.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_subtype",
+      "object_name": "SUBTYPE",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_subtype.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_sxecutable",
+      "object_name": "SXECUTABLE",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_sxecutable.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_sysdel",
+      "object_name": "SYSDEL",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_sysdel.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_sysdelfile",
+      "object_name": "SYSDELFILE",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_sysdelfile.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_sysdelpgm",
+      "object_name": "SYSDELPGM",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_sysdelpgm.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_sysdelsrc",
+      "object_name": "SYSDELSRC",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_sysdelsrc.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_sysfile",
+      "object_name": "SYSFILE",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_sysfile.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_syskeynbr",
+      "object_name": "SYSKEYNBR",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_syskeynbr.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_sysrel",
+      "object_name": "SYSREL",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_sysrel.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_system",
+      "object_name": "SYSTEM",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_system.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_title",
+      "object_name": "TITLE",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_title.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_univmsg",
+      "object_name": "UNIVMSG",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_univmsg.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_univmsguse",
+      "object_name": "UNIVMSGUSE",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_univmsguse.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_userbust",
+      "object_name": "USERBUST",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_userbust.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_usercat",
+      "object_name": "USERCAT",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_usercat.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_usercnd",
+      "object_name": "USERCND",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_usercnd.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_usercndelm",
+      "object_name": "USERCNDELM",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_usercndelm.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_userdrill",
+      "object_name": "USERDRILL",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_userdrill.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_userexe",
+      "object_name": "USEREXE",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_userexe.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_userfilcnd",
+      "object_name": "USERFILCND",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_userfilcnd.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_userfile",
+      "object_name": "USERFILE",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_userfile.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_userfld",
+      "object_name": "USERFLD",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_userfld.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_usergrp",
+      "object_name": "USERGRP",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_usergrp.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 1,
+      "object_id": "lawson_erp_gen_usergrpdtl",
+      "object_name": "USERGRPDTL",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_usergrpdtl.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 1,
+      "object_id": "lawson_erp_gen_userinfo",
+      "object_name": "USERINFO",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_userinfo.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_userkey",
+      "object_name": "USERKEY",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_userkey.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_usermap",
+      "object_name": "USERMAP",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_usermap.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 1,
+      "object_id": "lawson_erp_gen_usermenu",
+      "object_name": "USERMENU",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_usermenu.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_usermeth",
+      "object_name": "USERMETH",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_usermeth.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_userprdcnd",
+      "object_name": "USERPRDCND",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_userprdcnd.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_userprod",
+      "object_name": "USERPROD",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_userprod.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_userreclvl",
+      "object_name": "USERRECLVL",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_userreclvl.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 1,
+      "object_id": "lawson_erp_gen_userrpt",
+      "object_name": "USERRPT",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_userrpt.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_userscr",
+      "object_name": "USERSCR",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_userscr.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_usertab",
+      "object_name": "USERTAB",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_usertab.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_vallst",
+      "object_name": "VALLST",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_vallst.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_vallstuse",
+      "object_name": "VALLSTUSE",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_vallstuse.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_vallstxlt",
+      "object_name": "VALLSTXLT",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_vallstxlt.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_workfile1",
+      "object_name": "WORKFILE1",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_workfile1.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_workfile2",
+      "object_name": "WORKFILE2",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_workfile2.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_gen_wrkflopts",
+      "object_name": "WRKFLOPTS",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_wrkflopts.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 1,
+      "object_id": "lawson_erp_gen_xferfile",
+      "object_name": "XFERFILE",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_xferfile.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 1,
+      "object_id": "lawson_erp_gen_xferreq",
+      "object_name": "XFERREQ",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_gen_xferreq.yaml",
+      "source_system": "lawson_erp"
+    }
+  ],
+  "yaml_generated": 187
+}

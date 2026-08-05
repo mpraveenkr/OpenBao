@@ -1,0 +1,21 @@
+{
+  "created_at_utc": "2026-07-06T05:23:42.051345+00:00",
+  "dry_run": false,
+  "failures": [],
+  "input": "templates/generated_compact_database_templates/Warehouse_REPO_SMMASTST_Historical_SQL_Server_compact.xlsx",
+  "limit": null,
+  "metadata_db": null,
+  "metadata_upserts": 0,
+  "objects_processed": 1,
+  "output_dir": "configs/sources/database_compact_generated",
+  "successes": [
+    {
+      "columns": 2,
+      "object_id": "warehouse_repo_smmastst_summary_master",
+      "object_name": "REPO.SMMASTST",
+      "output_path": "configs/sources/database_compact_generated/warehouse_repo_smmastst_summary_master.yaml",
+      "source_system": "warehouse_repo"
+    }
+  ],
+  "yaml_generated": 1
+}

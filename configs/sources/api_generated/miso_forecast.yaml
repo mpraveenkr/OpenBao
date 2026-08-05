@@ -1,0 +1,143 @@
+object_id: miso_forecast
+source_system: miso
+source_type: api
+object_name: forecast
+enabled: true
+load_strategy: full
+extraction:
+  base_url: https://apim.misoenergy.org/lg1/v1
+  endpoint: /forecast/{date}/load
+  method: GET
+  auth_type: api_key_header
+  connection_name: miso_apim_subscription
+  api_key_header_name: Ocp-Apim-Subscription-Key
+  api_key_secret_ref: openbao:secret/data/ingestion-framework/api/miso#subscription_key
+  pagination:
+    type: page_number
+    param: pageNumber
+    start: 1
+    increment: 1
+  query_parameters:
+    pageNumber:
+      value_template: '{pageNumber}'
+      type: integer
+      required: true
+      notes: Pagination counter.
+    timeResolution:
+      value_template: hourly
+      type: string
+      required: true
+      notes: Static query parameter.
+  runtime_parameters:
+  - name: date
+    location: path
+    placeholder: '{date}'
+    type: date
+    required: true
+    default_strategy: current_date
+    timezone: UTC
+    format: yyyy-MM-dd
+    offset_days: 1
+    notes: Resolved at run time, then substituted into endpoint.
+  - name: pageNumber
+    location: query
+    placeholder: pageNumber
+    type: integer
+    required: true
+    default_strategy: pagination_counter
+    default_value: 1
+    notes: Managed by pagination logic.
+  - name: timeResolution
+    location: query
+    placeholder: timeResolution
+    type: string
+    required: true
+    default_strategy: static
+    default_value: hourly
+    notes: Static query parameter.
+  response_record_path: $.data[*]
+  rate_limit_per_minute: 60
+  timeout_seconds: 30
+  retry_count: 3
+schema_policy:
+  mode: hybrid
+  flatten_json: true
+  nested_field_separator: _
+  column_case: snake_case
+  include_unmodeled_columns: true
+  allow_schema_evolution: true
+schema:
+  columns:
+    start:
+      type: timestamp
+      nullable: false
+      mask_policy: none
+      source_json_path: timeInterval.start
+      description: Start of forecasted hourly period.
+    end:
+      type: timestamp
+      nullable: false
+      mask_policy: none
+      source_json_path: timeInterval.end
+      description: End of forecasted hourly period.
+    region:
+      type: string
+      nullable: false
+      mask_policy: none
+      source_json_path: region
+      description: Region identifier.
+    local_resource_zone:
+      type: string
+      nullable: false
+      mask_policy: none
+      source_json_path: localResourceZone
+      description: Local Resource Zone identifier.
+    load_forecast:
+      type: float
+      nullable: true
+      mask_policy: none
+      source_json_path: loadForecast
+      description: Forecasted load in MW.
+    init_date:
+      type: date
+      nullable: true
+      mask_policy: none
+      source_json_path: init
+      description: Forecast initialization date.
+    time_resolution:
+      type: string
+      nullable: true
+      mask_policy: none
+      source_json_path: timeInterval.resolution
+      description: Resolution from nested time interval object.
+    interval_value:
+      type: string
+      nullable: true
+      mask_policy: none
+      source_json_path: timeInterval.value
+      description: Interval value from nested time interval object.
+target:
+  storage_name: minio_bronze
+  zone: bronze
+  format: parquet
+  write_mode: append
+  compression: snappy
+  partition_by:
+  - ingest_year
+  - ingest_month
+  - ingest_day
+audit:
+  dq_checks:
+  - row_count_gt_zero
+  primary_key:
+  - start
+  - region
+  - local_resource_zone
+security:
+  classification: internal
+  contains_bcsi: false
+  contains_pii: false
+  encryption_required: false
+  masking_required: false
+  raw_payload_retention_days: 30
+  access_group: data_platform_users

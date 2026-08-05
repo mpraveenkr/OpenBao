@@ -1,0 +1,92 @@
+object_id: helper_app_aud_utsprofile_profile_audit
+source_system: helper_app_sqlserver
+source_type: database
+object_name: AUD_UTSPROFILE
+enabled: true
+load_strategy: incremental
+extraction:
+  db_type: sql_server
+  connection_name: WVP-SQL19-AG
+  database_name: AUD_UTSPROFILE
+  schema_name: dbo
+  table_name: AUD_UTSPROFILE
+  query: SELECT * FROM dbo.AUD_UTSPROFILE WHERE LOAD_TS > :last_watermark
+  incremental_column: load_ts
+  watermark_type: timestamp
+  watermark:
+    column: load_ts
+    operator: '>'
+    initial_value: '1900-01-01T00:00:00Z'
+    value_type: timestamp
+    timezone: UTC
+    commit_rule: max_extracted_value_after_successful_write
+    late_arriving_overlap: 0 minutes
+schema_policy:
+  mode: hybrid
+  column_case: snake_case
+  replace_spaces_with: _
+  allow_schema_evolution: true
+  include_unmodeled_columns: true
+  infer_types: true
+  column_discovery: source_metadata
+  type_discovery: source_metadata
+schema:
+  columns:
+    p_mtrid:
+      type: string
+      nullable: false
+      mask_policy: none
+      source_column_name: P_MTRID
+    p_mtrchn:
+      type: decimal
+      nullable: false
+      mask_policy: none
+      source_column_name: P_MTRCHN
+    p_dtm:
+      type: string
+      nullable: false
+      mask_policy: none
+      source_column_name: P_DTM
+    billing_period_dt:
+      type: timestamp
+      nullable: false
+      mask_policy: none
+      source_column_name: BILLING_PERIOD_DT
+    load_ts:
+      type: timestamp
+      nullable: false
+      mask_policy: none
+      source_column_name: LOAD_TS
+target:
+  storage_name: helper_app_bronze
+  zone: bronze
+  format: parquet
+  write_mode: append
+  compression: snappy
+  partition_by:
+  - ingest_year
+  - ingest_month
+  - ingest_day
+audit:
+  dq_checks:
+  - row_count_gt_zero
+  - composite_pk_not_null
+  - composite_pk_unique
+  - rowid_unique
+  - load_ts_not_null
+  - p_mtrid_fk_check
+  - p_dtm_format_check
+  - billing_period_dt_not_null
+  primary_key:
+  - p_mtrid
+  - p_mtrchn
+  - p_dtm
+  - billing_period_dt
+security:
+  classification: confidential
+  contains_bcsi: false
+  contains_pii: false
+  encryption_required: true
+  masking_required: false
+  raw_payload_retention_days: 365
+  access_group: helper_app_metering_data_readers

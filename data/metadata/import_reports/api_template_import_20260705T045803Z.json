@@ -1,0 +1,22 @@
+{
+  "created_at_utc": "2026-07-05T04:58:03.847790+00:00",
+  "dry_run": false,
+  "failures": [],
+  "files_seen": 0,
+  "input": "/Users/badari/Downloads/api_templates/Weather_Forecast Template.xlsx",
+  "limit": null,
+  "objects_processed": 1,
+  "output": "/private/tmp/weather_forecast_recheck.yaml",
+  "successes": [
+    {
+      "columns": 20,
+      "object_id": "weather_forecast",
+      "object_name": "weather_forecast",
+      "output_path": "/private/tmp/weather_forecast_recheck.yaml",
+      "parameter_sets": 2,
+      "source_system": "open_meteo",
+      "workbook": "/Users/badari/Downloads/api_templates/Weather_Forecast Template.xlsx"
+    }
+  ],
+  "yaml_generated": 1
+}

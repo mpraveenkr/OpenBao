@@ -1,0 +1,12 @@
+storages:
+  minio_bronze:
+    type: s3_compatible
+    bucket: bronze
+    base_prefix: bronze
+    endpoint_url: http://minio:9000
+    access_key_ref: openbao:secret/data/ingestion-framework/minio#access_key
+    secret_key_ref: openbao:secret/data/ingestion-framework/minio#secret_key
+    region: us-east-1
+    encryption:
+      supported: false
+      mode: none

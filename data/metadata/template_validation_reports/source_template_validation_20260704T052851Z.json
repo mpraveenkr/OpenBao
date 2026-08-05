@@ -1,0 +1,621 @@
+{
+  "api_folder": "/Users/badari/Downloads/api_templates",
+  "created_at_utc": "2026-07-04T05:28:51.955743+00:00",
+  "database_folder": "/Users/badari/Downloads/database_templates",
+  "dependency_folder": "/Users/badari/Downloads/station_files",
+  "failed": 1,
+  "files": 23,
+  "passed": 17,
+  "results": [
+    {
+      "errors": [],
+      "file": "/Users/badari/Downloads/api_templates/MISO_Forecast_Template.xlsx",
+      "info": {
+        "masked_columns": 0,
+        "parameter_set_columns": 0,
+        "parameter_sets": 0,
+        "primary_key_columns": 3,
+        "query_parameters": 2,
+        "response_shape": null,
+        "runtime_parameters": 3,
+        "schema_columns": 8,
+        "sheets": [
+          "Ingestion_Template",
+          "Query_Parameters",
+          "Runtime_Parameters",
+          "Schema_Policy",
+          "Schema",
+          "compare_schema",
+          "Response",
+          "Validation_Lists"
+        ]
+      },
+      "source_kind": "api",
+      "status": "pass",
+      "warnings": [],
+      "workbook": "MISO_Forecast_Template.xlsx"
+    },
+    {
+      "errors": [],
+      "file": "/Users/badari/Downloads/api_templates/MISO_Realtime_Template.xlsx",
+      "info": {
+        "masked_columns": 0,
+        "parameter_set_columns": 0,
+        "parameter_sets": 0,
+        "primary_key_columns": 2,
+        "query_parameters": 2,
+        "response_shape": null,
+        "runtime_parameters": 4,
+        "schema_columns": 6,
+        "sheets": [
+          "Ingestion_Template",
+          "Query_Parameters",
+          "Runtime_Parameters",
+          "Schema_Policy",
+          "Schema",
+          "Compare_schema",
+          "Response",
+          "Validation_Lists"
+        ]
+      },
+      "source_kind": "api",
+      "status": "pass",
+      "warnings": [],
+      "workbook": "MISO_Realtime_Template.xlsx"
+    },
+    {
+      "errors": [],
+      "file": "/Users/badari/Downloads/api_templates/PJM_Load_Forecast_Template.xlsx",
+      "info": {
+        "masked_columns": 0,
+        "parameter_set_columns": 0,
+        "parameter_sets": 0,
+        "primary_key_columns": 2,
+        "query_parameters": 2,
+        "response_shape": null,
+        "runtime_parameters": 1,
+        "schema_columns": 8,
+        "sheets": [
+          "Ingestion_Template",
+          "Query_Parameters",
+          "Runtime_Parameters",
+          "Schema_Policy",
+          "Schema",
+          "compare Schema",
+          "Response"
+        ]
+      },
+      "source_kind": "api",
+      "status": "pass",
+      "warnings": [],
+      "workbook": "PJM_Load_Forecast_Template.xlsx"
+    },
+    {
+      "errors": [],
+      "file": "/Users/badari/Downloads/api_templates/PJM_hrl_load_metered_Template.xlsx",
+      "info": {
+        "masked_columns": 0,
+        "parameter_set_columns": 0,
+        "parameter_sets": 0,
+        "primary_key_columns": 2,
+        "query_parameters": 3,
+        "response_shape": null,
+        "runtime_parameters": 2,
+        "schema_columns": 8,
+        "sheets": [
+          "Ingestion_Template",
+          "Query_Parameters",
+          "Runtime_Parameters",
+          "Schema_Policy",
+          "Schema",
+          "compare Schema",
+          "Response"
+        ]
+      },
+      "source_kind": "api",
+      "status": "pass",
+      "warnings": [],
+      "workbook": "PJM_hrl_load_metered_Template.xlsx"
+    },
+    {
+      "errors": [],
+      "file": "/Users/badari/Downloads/api_templates/Weather_Archive Template.xlsx",
+      "info": {
+        "masked_columns": 0,
+        "parameter_set_columns": 4,
+        "parameter_sets": 2,
+        "primary_key_columns": 4,
+        "query_parameters": 7,
+        "response_shape": "timeseries_arrays",
+        "runtime_parameters": 4,
+        "schema_columns": 20,
+        "sheets": [
+          "Ingestion_Template",
+          "Query_Parameters",
+          "Runtime_Parameters",
+          "Parameter_Sets",
+          "Parameter_Set_Columns",
+          "Schema_Policy",
+          "Schema",
+          "Compare_schema",
+          "Response"
+        ]
+      },
+      "source_kind": "api",
+      "status": "warn",
+      "warnings": [
+        "Parameter set file exists at /Users/badari/Downloads/station_files/miso_stations.csv, but template references data/input/miso_stations.csv",
+        "Parameter set file exists at /Users/badari/Downloads/station_files/pjm_stations.csv, but template references data/input/pjm_stations.csv"
+      ],
+      "workbook": "Weather_Archive Template.xlsx"
+    },
+    {
+      "errors": [],
+      "file": "/Users/badari/Downloads/api_templates/Weather_Forecast Template.xlsx",
+      "info": {
+        "masked_columns": 0,
+        "parameter_set_columns": 4,
+        "parameter_sets": 2,
+        "primary_key_columns": 4,
+        "query_parameters": 7,
+        "response_shape": "timeseries_arrays",
+        "runtime_parameters": 4,
+        "schema_columns": 20,
+        "sheets": [
+          "Ingestion_Template",
+          "Query_Parameters",
+          "Runtime_Parameters",
+          "Parameter_Sets",
+          "Parameter_Set_Columns",
+          "Schema_Policy",
+          "Schema",
+          "Compare_schema",
+          "Response"
+        ]
+      },
+      "source_kind": "api",
+      "status": "warn",
+      "warnings": [
+        "Parameter set file exists at /Users/badari/Downloads/station_files/miso_stations.csv, but template references data/input/miso_stations.csv",
+        "Parameter set file exists at /Users/badari/Downloads/station_files/pjm_stations.csv, but template references data/input/pjm_stations.csv"
+      ],
+      "workbook": "Weather_Forecast Template.xlsx"
+    },
+    {
+      "errors": [],
+      "file": "/Users/badari/Downloads/database_templates/Helper_AUDUTSPROFILE_SQL_Server.xlsx",
+      "info": {
+        "duplicate_column_names": 0,
+        "load_strategy": "incremental",
+        "masked_columns": 0,
+        "object_id": "helper_app_aud_utsprofile_profile_audit",
+        "object_name": "AUD_UTSPROFILE",
+        "primary_key_columns": 4,
+        "schema_columns": 9,
+        "sheets": [
+          "README",
+          "Helper_AUD_UTSPROFILE",
+          "Validation_Lists"
+        ],
+        "source_sheet": "Helper_AUD_UTSPROFILE",
+        "source_system": "helper_app_sqlserver",
+        "table_separators": 0,
+        "tables_with_columns": 0
+      },
+      "source_kind": "database",
+      "status": "pass",
+      "warnings": [],
+      "workbook": "Helper_AUDUTSPROFILE_SQL_Server.xlsx"
+    },
+    {
+      "errors": [],
+      "file": "/Users/badari/Downloads/database_templates/Helper_Meter_SDP_SQL_Server.xlsx",
+      "info": {
+        "duplicate_column_names": 0,
+        "load_strategy": "incremental",
+        "masked_columns": 0,
+        "object_id": "helper_app_meter_sdp_service_delivery_point",
+        "object_name": "METER_SDP",
+        "primary_key_columns": 1,
+        "schema_columns": 18,
+        "sheets": [
+          "README",
+          "Helper_METER_SDP",
+          "Validation_Lists"
+        ],
+        "source_sheet": "Helper_METER_SDP",
+        "source_system": "helper_app_sqlserver",
+        "table_separators": 0,
+        "tables_with_columns": 0
+      },
+      "source_kind": "database",
+      "status": "pass",
+      "warnings": [],
+      "workbook": "Helper_Meter_SDP_SQL_Server.xlsx"
+    },
+    {
+      "errors": [],
+      "file": "/Users/badari/Downloads/database_templates/Lawson_GEN_Historical_SQL_Server.xlsx",
+      "info": {
+        "duplicate_column_names": 249,
+        "load_strategy": "full",
+        "masked_columns": 16,
+        "object_id": "lawson_erp_gen_full_historical",
+        "object_name": "GEN",
+        "primary_key_columns": 0,
+        "schema_columns": 2423,
+        "sheets": [
+          "README",
+          "Lawson_GEN"
+        ],
+        "source_sheet": "Lawson_GEN",
+        "source_system": "lawson_erp",
+        "table_separators": 187,
+        "tables_with_columns": 187
+      },
+      "source_kind": "database",
+      "status": "warn",
+      "warnings": [
+        "No primary key columns marked",
+        "Lawson contains duplicate column names across tables; current one-object YAML generator must split by table or preserve table-qualified schema paths"
+      ],
+      "workbook": "Lawson_GEN_Historical_SQL_Server.xlsx"
+    },
+    {
+      "errors": [],
+      "file": "/Users/badari/Downloads/database_templates/Lawson_LAW10_Historical_SQl_Server.xlsx",
+      "info": {
+        "duplicate_column_names": 4607,
+        "load_strategy": "full",
+        "masked_columns": 232,
+        "object_id": "lawson_erp_law10_full_historical",
+        "object_name": "LAW10",
+        "primary_key_columns": 0,
+        "schema_columns": 39605,
+        "sheets": [
+          "README",
+          "Lawson_LAW10"
+        ],
+        "source_sheet": "Lawson_LAW10",
+        "source_system": "lawson_erp",
+        "table_separators": 1911,
+        "tables_with_columns": 1911
+      },
+      "source_kind": "database",
+      "status": "warn",
+      "warnings": [
+        "No primary key columns marked",
+        "Lawson contains duplicate column names across tables; current one-object YAML generator must split by table or preserve table-qualified schema paths"
+      ],
+      "workbook": "Lawson_LAW10_Historical_SQl_Server.xlsx"
+    },
+    {
+      "errors": [],
+      "file": "/Users/badari/Downloads/database_templates/Lawson_WVPA_Historical_SQl_Server.xlsx",
+      "info": {
+        "duplicate_column_names": 17,
+        "load_strategy": "full",
+        "masked_columns": 3,
+        "object_id": "lawson_erp_wvpa_full_historical",
+        "object_name": "WVPA",
+        "primary_key_columns": 0,
+        "schema_columns": 137,
+        "sheets": [
+          "README",
+          "Lawson_WVPA"
+        ],
+        "source_sheet": "Lawson_WVPA",
+        "source_system": "lawson_erp",
+        "table_separators": 17,
+        "tables_with_columns": 17
+      },
+      "source_kind": "database",
+      "status": "warn",
+      "warnings": [
+        "No primary key columns marked",
+        "Lawson contains duplicate column names across tables; current one-object YAML generator must split by table or preserve table-qualified schema paths"
+      ],
+      "workbook": "Lawson_WVPA_Historical_SQl_Server.xlsx"
+    },
+    {
+      "errors": [],
+      "file": "/Users/badari/Downloads/database_templates/MV90_Master_CMMASTST_SQL_Server.xlsx",
+      "info": {
+        "duplicate_column_names": 0,
+        "load_strategy": "incremental",
+        "masked_columns": 5,
+        "object_id": "itron_mv90_cmmastst_customer_master",
+        "object_name": "cmmastst_customer_master",
+        "primary_key_columns": 1,
+        "schema_columns": 88,
+        "sheets": [
+          "README",
+          "Database_CMMASTST",
+          "Validation_Lists"
+        ],
+        "source_sheet": "Database_CMMASTST",
+        "source_system": "itron_mv90",
+        "table_separators": 0,
+        "tables_with_columns": 0
+      },
+      "source_kind": "database",
+      "status": "pass",
+      "warnings": [],
+      "workbook": "MV90_Master_CMMASTST_SQL_Server.xlsx"
+    },
+    {
+      "errors": [],
+      "file": "/Users/badari/Downloads/database_templates/MV90_Master_CMMASTST_SQL_Server_archive.xlsx",
+      "info": {
+        "duplicate_column_names": 0,
+        "load_strategy": "incremental",
+        "masked_columns": 0,
+        "object_id": "itron_mv90_cmmastst_customer_master",
+        "object_name": "mv90",
+        "primary_key_columns": 1,
+        "schema_columns": 88,
+        "sheets": [
+          "README",
+          "Database_CMMASTST",
+          "Validation_Lists"
+        ],
+        "source_sheet": "Database_CMMASTST",
+        "source_system": "itron_mv90_sqlserver",
+        "table_separators": 0,
+        "tables_with_columns": 0
+      },
+      "source_kind": "database",
+      "status": "pass",
+      "warnings": [],
+      "workbook": "MV90_Master_CMMASTST_SQL_Server_archive.xlsx"
+    },
+    {
+      "errors": [],
+      "file": "/Users/badari/Downloads/database_templates/MV90_Master_MMMASTST_SQL_Server.xlsx",
+      "info": {
+        "duplicate_column_names": 0,
+        "load_strategy": "incremental",
+        "masked_columns": 0,
+        "object_id": "itron_mv90_mmmastst_meter_channel",
+        "object_name": "mmmastst_meter_channel",
+        "primary_key_columns": 2,
+        "schema_columns": 76,
+        "sheets": [
+          "README",
+          "Database_MMMASTST",
+          "Validation_Lists"
+        ],
+        "source_sheet": "Database_MMMASTST",
+        "source_system": "itron_mv90",
+        "table_separators": 0,
+        "tables_with_columns": 0
+      },
+      "source_kind": "database",
+      "status": "pass",
+      "warnings": [],
+      "workbook": "MV90_Master_MMMASTST_SQL_Server.xlsx"
+    },
+    {
+      "errors": [],
+      "file": "/Users/badari/Downloads/database_templates/MV90_Master_RMMASTST_SQL_Server.xlsx",
+      "info": {
+        "duplicate_column_names": 0,
+        "load_strategy": "incremental",
+        "masked_columns": 3,
+        "object_id": "itron_mv90_rmmastst_recorder_master",
+        "object_name": "rmmastst_recorder_master",
+        "primary_key_columns": 1,
+        "schema_columns": 110,
+        "sheets": [
+          "README",
+          "Database_RMMASTST",
+          "Validation_Lists"
+        ],
+        "source_sheet": "Database_RMMASTST",
+        "source_system": "itron_mv90",
+        "table_separators": 0,
+        "tables_with_columns": 0
+      },
+      "source_kind": "database",
+      "status": "pass",
+      "warnings": [],
+      "workbook": "MV90_Master_RMMASTST_SQL_Server.xlsx"
+    },
+    {
+      "errors": [
+        "Legacy .xls workbook is not readable by the current openpyxl-based importer; convert to .xlsx"
+      ],
+      "file": "/Users/badari/Downloads/database_templates/MV90_Master_RMMASTST_SQL_Server_archive.xls",
+      "info": {
+        "sheets": []
+      },
+      "source_kind": "database",
+      "status": "fail",
+      "warnings": [],
+      "workbook": "MV90_Master_RMMASTST_SQL_Server_archive.xls"
+    },
+    {
+      "errors": [],
+      "file": "/Users/badari/Downloads/database_templates/MV90_Master_SMMASTST_SQL_Server.xlsx",
+      "info": {
+        "duplicate_column_names": 0,
+        "load_strategy": "incremental",
+        "masked_columns": 0,
+        "object_id": "itron_mv90_smmastst_summary_master",
+        "object_name": "smmastst_summary_master",
+        "primary_key_columns": 5,
+        "schema_columns": 92,
+        "sheets": [
+          "README",
+          "Database_SMMASTST",
+          "Validation_Lists"
+        ],
+        "source_sheet": "Database_SMMASTST",
+        "source_system": "itron_mv90",
+        "table_separators": 0,
+        "tables_with_columns": 0
+      },
+      "source_kind": "database",
+      "status": "pass",
+      "warnings": [],
+      "workbook": "MV90_Master_SMMASTST_SQL_Server.xlsx"
+    },
+    {
+      "errors": [],
+      "file": "/Users/badari/Downloads/database_templates/MV90_Master_SUPMAS_SQL_Server.xlsx",
+      "info": {
+        "duplicate_column_names": 0,
+        "load_strategy": "incremental",
+        "masked_columns": 0,
+        "object_id": "itron_mv90_supmas_supplemental_master",
+        "object_name": "supmas_supplemntal_master",
+        "primary_key_columns": 1,
+        "schema_columns": 29,
+        "sheets": [
+          "README",
+          "Database_SUPMAS",
+          "Validation_Lists"
+        ],
+        "source_sheet": "Database_SUPMAS",
+        "source_system": "itron_mv90",
+        "table_separators": 0,
+        "tables_with_columns": 0
+      },
+      "source_kind": "database",
+      "status": "pass",
+      "warnings": [],
+      "workbook": "MV90_Master_SUPMAS_SQL_Server.xlsx"
+    },
+    {
+      "errors": [],
+      "file": "/Users/badari/Downloads/database_templates/Warehouse_REPO_CMMASTST_Historical_SQL_Server.xlsx",
+      "info": {
+        "duplicate_column_names": 0,
+        "load_strategy": "incremental",
+        "masked_columns": 0,
+        "object_id": "warehouse_repo_cmmastst_customer_meter",
+        "object_name": "REPO.CMMASTST",
+        "primary_key_columns": 1,
+        "schema_columns": 13,
+        "sheets": [
+          "README",
+          "Database_REPO_CMMASTST",
+          "Validation_Lists"
+        ],
+        "source_sheet": "Database_REPO_CMMASTST",
+        "source_system": "warehouse_repo",
+        "table_separators": 0,
+        "tables_with_columns": 0
+      },
+      "source_kind": "database",
+      "status": "pass",
+      "warnings": [],
+      "workbook": "Warehouse_REPO_CMMASTST_Historical_SQL_Server.xlsx"
+    },
+    {
+      "errors": [],
+      "file": "/Users/badari/Downloads/database_templates/Warehouse_REPO_METER_SDP_Historical_SQL_Server.xlsx",
+      "info": {
+        "duplicate_column_names": 0,
+        "load_strategy": "incremental",
+        "masked_columns": 0,
+        "object_id": "warehouse_repo_meter_sdp_service_delivery_point",
+        "object_name": "REPO.METER_SDP",
+        "primary_key_columns": 1,
+        "schema_columns": 20,
+        "sheets": [
+          "README",
+          "Database_REPO_METER_SDP",
+          "Validation_Lists"
+        ],
+        "source_sheet": "Database_REPO_METER_SDP",
+        "source_system": "warehouse_repo",
+        "table_separators": 0,
+        "tables_with_columns": 0
+      },
+      "source_kind": "database",
+      "status": "pass",
+      "warnings": [],
+      "workbook": "Warehouse_REPO_METER_SDP_Historical_SQL_Server.xlsx"
+    },
+    {
+      "errors": [],
+      "file": "/Users/badari/Downloads/database_templates/Warehouse_REPO_MMMASTST_Historical_SQL_Server.xlsx",
+      "info": {
+        "duplicate_column_names": 0,
+        "load_strategy": "incremental",
+        "masked_columns": 0,
+        "object_id": "warehouse_repo_mmmastst_meter_channel",
+        "object_name": "REPO.MMMASTST",
+        "primary_key_columns": 1,
+        "schema_columns": 18,
+        "sheets": [
+          "README",
+          "Database_REPO_MMMASTST",
+          "Validation_Lists"
+        ],
+        "source_sheet": "Database_REPO_MMMASTST",
+        "source_system": "warehouse_repo",
+        "table_separators": 0,
+        "tables_with_columns": 0
+      },
+      "source_kind": "database",
+      "status": "pass",
+      "warnings": [],
+      "workbook": "Warehouse_REPO_MMMASTST_Historical_SQL_Server.xlsx"
+    },
+    {
+      "errors": [],
+      "file": "/Users/badari/Downloads/database_templates/Warehouse_REPO_RMMASTST_Historical_SQL_Server.xlsx",
+      "info": {
+        "duplicate_column_names": 0,
+        "load_strategy": "incremental",
+        "masked_columns": 0,
+        "object_id": "warehouse_repo_rmmastst_recorder_master",
+        "object_name": "REPO.RMMASTST",
+        "primary_key_columns": 1,
+        "schema_columns": 19,
+        "sheets": [
+          "README",
+          "Database_REPO_RMMASTST",
+          "Validation_Lists"
+        ],
+        "source_sheet": "Database_REPO_RMMASTST",
+        "source_system": "warehouse_repo",
+        "table_separators": 0,
+        "tables_with_columns": 0
+      },
+      "source_kind": "database",
+      "status": "pass",
+      "warnings": [],
+      "workbook": "Warehouse_REPO_RMMASTST_Historical_SQL_Server.xlsx"
+    },
+    {
+      "errors": [],
+      "file": "/Users/badari/Downloads/database_templates/Warehouse_REPO_SMMASTST_Historical_SQL_Server.xlsx",
+      "info": {
+        "duplicate_column_names": 0,
+        "load_strategy": "incremental",
+        "masked_columns": 0,
+        "object_id": "warehouse_repo_smmastst_summary_master",
+        "object_name": "REPO.SMMASTST",
+        "primary_key_columns": 1,
+        "schema_columns": 29,
+        "sheets": [
+          "README",
+          "Database_REPO_SMMASTST",
+          "Validation_Lists"
+        ],
+        "source_sheet": "Database_REPO_SMMASTST",
+        "source_system": "warehouse_repo",
+        "table_separators": 0,
+        "tables_with_columns": 0
+      },
+      "source_kind": "database",
+      "status": "pass",
+      "warnings": [],
+      "workbook": "Warehouse_REPO_SMMASTST_Historical_SQL_Server.xlsx"
+    }
+  ],
+  "warned": 5
+}

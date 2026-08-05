@@ -1,0 +1,181 @@
+object_id: lawson_erp_law10_aricst
+source_system: lawson_erp
+source_type: database
+object_name: ARICST
+enabled: true
+load_strategy: full
+extraction:
+  db_type: sql_server
+  connection_name: lawson_erp_sqlserver_readonly
+  database_name: LAW10
+  schema_name: dbo
+  table_name: ARICST
+  query: SELECT * FROM dbo.ARICST  -- one pass per table; 1911 tables total
+schema_policy:
+  mode: hybrid
+  column_case: snake_case
+  replace_spaces_with: _
+  allow_schema_evolution: true
+  include_unmodeled_columns: true
+  infer_types: true
+  column_discovery: source_metadata
+  type_discovery: source_metadata
+schema:
+  columns:
+    addr1:
+      type: string
+      nullable: false
+      mask_policy: redact
+      source_column_name: ADDR1
+    addr2:
+      type: string
+      nullable: false
+      mask_policy: redact
+      source_column_name: ADDR2
+    addr3:
+      type: string
+      nullable: false
+      mask_policy: redact
+      source_column_name: ADDR3
+    addr4:
+      type: string
+      nullable: false
+      mask_policy: redact
+      source_column_name: ADDR4
+    city:
+      type: string
+      nullable: false
+      mask_policy: redact
+      source_column_name: CITY
+    zip:
+      type: string
+      nullable: false
+      mask_policy: redact
+      source_column_name: ZIP
+    phone_nmbr:
+      type: string
+      nullable: false
+      mask_policy: redact
+      source_column_name: PHONE_NMBR
+    phone_ext:
+      type: string
+      nullable: false
+      mask_policy: redact
+      source_column_name: PHONE_EXT
+    credit_lim_grp:
+      type: decimal
+      nullable: false
+      mask_policy: tokenize
+      source_column_name: CREDIT_LIM_GRP
+    tax_id:
+      type: string
+      nullable: false
+      mask_policy: hash
+      source_column_name: TAX_ID
+    phone_nmbr2:
+      type: string
+      nullable: false
+      mask_policy: redact
+      source_column_name: PHONE_NMBR2
+    phone_ext2:
+      type: string
+      nullable: false
+      mask_policy: redact
+      source_column_name: PHONE_EXT2
+    credit_anlyst:
+      type: string
+      nullable: false
+      mask_policy: tokenize
+      source_column_name: CREDIT_ANLYST
+    credit_lim:
+      type: decimal
+      nullable: false
+      mask_policy: tokenize
+      source_column_name: CREDIT_LIM
+    credit_lim_dat:
+      type: timestamp
+      nullable: false
+      mask_policy: tokenize
+      source_column_name: CREDIT_LIM_DAT
+    credit_revdays:
+      type: decimal
+      nullable: false
+      mask_policy: tokenize
+      source_column_name: CREDIT_REVDAYS
+    bank_acct_nbr:
+      type: string
+      nullable: false
+      mask_policy: redact
+      source_column_name: BANK_ACCT_NBR
+    cu_addr1:
+      type: string
+      nullable: false
+      mask_policy: redact
+      source_column_name: CU_ADDR1
+    cu_addr2:
+      type: string
+      nullable: false
+      mask_policy: redact
+      source_column_name: CU_ADDR2
+    cu_addr3:
+      type: string
+      nullable: false
+      mask_policy: redact
+      source_column_name: CU_ADDR3
+    cu_addr4:
+      type: string
+      nullable: false
+      mask_policy: redact
+      source_column_name: CU_ADDR4
+    cu_city:
+      type: string
+      nullable: false
+      mask_policy: redact
+      source_column_name: CU_CITY
+    cu_postal_code:
+      type: string
+      nullable: false
+      mask_policy: redact
+      source_column_name: CU_POSTAL_CODE
+    e_mail_address:
+      type: string
+      nullable: false
+      mask_policy: redact
+      source_column_name: E_MAIL_ADDRESS
+    url_addr:
+      type: string
+      nullable: false
+      mask_policy: redact
+      source_column_name: URL_ADDR
+target:
+  storage_name: itron_mv90_bronze
+  zone: bronze
+  format: parquet
+  write_mode: append
+  compression: snappy
+  partition_by:
+  - ingest_year
+  - ingest_month
+  - ingest_day
+audit:
+  dq_checks:
+  - row_count_match_per_table
+  - all_tables_extracted
+  - tokenize_cols_masked
+  - hash_cols_applied
+  - redact_applied_at_silver
+  - sse_kms_encryption_verified
+  - access_group_enforced
+  - no_raw_sensitive_in_target
+  - schema_column_count_match
+  - null_check_key_cols
+  - no_duplicate_rows
+  primary_key: []
+security:
+  classification: confidential
+  contains_bcsi: false
+  contains_pii: true
+  encryption_required: true
+  masking_required: true
+  raw_payload_retention_days: 2555
+  access_group: lawson_law10_data_readers

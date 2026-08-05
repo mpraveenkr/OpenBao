@@ -1,0 +1,141 @@
+object_id: pjm_hrl_load_metered
+source_system: pjm
+source_type: api
+object_name: hrl_load_metered
+enabled: true
+load_strategy: full
+extraction:
+  base_url: https://api.pjm.com/api/v1
+  endpoint: /hrl_load_metered
+  method: GET
+  auth_type: api_key_header
+  connection_name: pjm_apim_subscription
+  api_key_header_name: Ocp-Apim-Subscription-Key
+  api_key_secret_ref: openbao:secret/data/ingestion-framework/api/pjm#subscription_key
+  pagination:
+    type: offset_limit
+    offset_param: startRow
+    limit_param: rowCount
+    start: 1
+    increment: 50000
+  query_parameters:
+    rowCount:
+      value_template: 50000
+      type: integer
+      required: true
+      notes: Page size.
+    startRow:
+      value_template: '{startRow}'
+      type: integer
+      required: true
+      notes: Pagination offset/cursor.
+    datetime_beginning_ept:
+      value_template: '{date}'
+      type: date
+      required: true
+      notes: Resolved as current date minus two days at runtime.
+  runtime_parameters:
+  - name: date
+    location: query
+    placeholder: datetime_beginning_ept
+    type: date
+    required: true
+    default_strategy: current_date
+    timezone: UTC
+    format: yyyy-MM-dd
+    offset_days: -4
+    notes: Resolved at run time; used by datetime_beginning_ept query parameter. No
+      Parameter_Sets iteration is needed for this PJM API.
+  - name: startRow
+    location: query
+    placeholder: startRow
+    type: integer
+    required: true
+    default_strategy: pagination_counter
+    default_value: 1
+    notes: Managed by pagination logic.
+  response_record_path: $.items[*]
+  rate_limit_per_minute: 60
+  timeout_seconds: 30
+  retry_count: 3
+schema_policy:
+  mode: hybrid
+  flatten_json: true
+  nested_field_separator: _
+  column_case: snake_case
+  include_unmodeled_columns: true
+  allow_schema_evolution: true
+schema:
+  columns:
+    datetime_beginning_utc:
+      type: timestamp
+      nullable: false
+      mask_policy: none
+      source_json_path: datetime_beginning_utc
+      description: Start of the hourly load interval in UTC
+    datetime_beginning_ept:
+      type: timestamp
+      nullable: false
+      mask_policy: none
+      source_json_path: datetime_beginning_ept
+      description: Start of the hourly load interval in Eastern Prevailing Time
+    nerc_region:
+      type: string
+      nullable: false
+      mask_policy: none
+      source_json_path: nerc_region
+      description: NERC region identifier (e.g., RFC)
+    mkt_region:
+      type: string
+      nullable: false
+      mask_policy: none
+      source_json_path: mkt_region
+      description: PJM market region (e.g., MIDATL)
+    zone:
+      type: string
+      nullable: false
+      mask_policy: none
+      source_json_path: zone
+      description: PJM zone code (e.g., AE)
+    load_area:
+      type: string
+      nullable: false
+      mask_policy: none
+      source_json_path: load_area
+      description: Load area name (e.g., AECO)
+    mw:
+      type: float
+      nullable: false
+      mask_policy: none
+      source_json_path: mw
+      description: Metered load in megawatts
+    is_verified:
+      type: boolean
+      nullable: true
+      mask_policy: none
+      source_json_path: is_verified
+      description: Whether the load value is verified by PJM
+target:
+  storage_name: minio_bronze
+  zone: bronze
+  format: parquet
+  write_mode: append
+  compression: snappy
+  partition_by:
+  - ingest_year
+  - ingest_month
+  - ingest_day
+audit:
+  dq_checks:
+  - row_count_gt_zero
+  primary_key:
+  - datetime_beginning_utc
+  - zone
+security:
+  classification: internal
+  contains_bcsi: false
+  contains_pii: false
+  encryption_required: false
+  masking_required: false
+  raw_payload_retention_days: 30
+  access_group: data_platform_users

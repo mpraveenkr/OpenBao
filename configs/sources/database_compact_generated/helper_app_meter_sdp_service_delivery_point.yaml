@@ -1,0 +1,101 @@
+object_id: helper_app_meter_sdp_service_delivery_point
+source_system: helper_app_sqlserver
+source_type: database
+object_name: METER_SDP
+enabled: true
+load_strategy: incremental
+extraction:
+  db_type: sql_server
+  connection_name: WVP-SQL19-AG
+  database_name: METER_SDP
+  schema_name: dbo
+  table_name: METER_SDP
+  query: SELECT * FROM dbo.METER_SDP WHERE LAST_UPDATED > :last_watermark
+  incremental_column: last_updated
+  watermark_type: timestamp
+  watermark:
+    column: last_updated
+    operator: '>'
+    initial_value: '1900-01-01T00:00:00Z'
+    value_type: timestamp
+    timezone: UTC
+    commit_rule: max_extracted_value_after_successful_write
+    late_arriving_overlap: 0 minutes
+schema_policy:
+  mode: hybrid
+  column_case: snake_case
+  replace_spaces_with: _
+  allow_schema_evolution: true
+  include_unmodeled_columns: true
+  infer_types: true
+  column_discovery: source_metadata
+  type_discovery: source_metadata
+schema:
+  columns:
+    meter_sdp_id:
+      type: decimal
+      nullable: false
+      mask_policy: none
+      source_column_name: METER_SDP_ID
+    date_entered:
+      type: timestamp
+      nullable: false
+      mask_policy: none
+      source_column_name: DATE_ENTERED
+    last_updated:
+      type: timestamp
+      nullable: false
+      mask_policy: none
+      source_column_name: LAST_UPDATED
+    customer_id:
+      type: decimal
+      nullable: false
+      mask_policy: none
+      source_column_name: CUSTOMER_ID
+    cons_sign_conversion_flag:
+      type: decimal
+      nullable: true
+      mask_policy: none
+      source_column_name: CONS_SIGN_CONVERSION_FLAG
+    used_for_edr_flag:
+      type: decimal
+      nullable: false
+      mask_policy: none
+      source_column_name: USED_FOR_EDR_FLAG
+    is_load_data_flag:
+      type: decimal
+      nullable: false
+      mask_policy: none
+      source_column_name: IS_LOAD_DATA_FLAG
+target:
+  storage_name: helper_app_bronze
+  zone: bronze
+  format: parquet
+  write_mode: append
+  compression: snappy
+  partition_by:
+  - ingest_year
+  - ingest_month
+  - ingest_day
+audit:
+  dq_checks:
+  - row_count_gt_zero
+  - primary_key_not_null
+  - primary_key_unique
+  - rowid_unique
+  - last_updated_not_null
+  - customer_id_fk_check
+  - meter_type_id_fk_check
+  - sdp_nbr_not_null
+  - active_flag_valid_values
+  - flag_columns_valid_values
+  primary_key:
+  - meter_sdp_id
+security:
+  classification: confidential
+  contains_bcsi: false
+  contains_pii: false
+  encryption_required: true
+  masking_required: false
+  raw_payload_retention_days: 365
+  access_group: helper_app_metering_data_readers

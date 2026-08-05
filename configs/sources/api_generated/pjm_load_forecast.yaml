@@ -1,0 +1,125 @@
+object_id: pjm_load_forecast
+source_system: pjm
+source_type: api
+object_name: load_forecast
+enabled: true
+load_strategy: full
+extraction:
+  base_url: https://api.pjm.com/api/v1
+  endpoint: /load_frcstd_7_day
+  method: GET
+  auth_type: api_key_header
+  connection_name: pjm_apim_subscription
+  api_key_header_name: Ocp-Apim-Subscription-Key
+  api_key_secret_ref: openbao:secret/data/ingestion-framework/api/pjm#subscription_key
+  pagination:
+    type: offset_limit
+    offset_param: startRow
+    limit_param: rowCount
+    start: 1
+    increment: 50000
+  query_parameters:
+    rowCount:
+      value_template: 50000
+      type: integer
+      required: true
+      notes: Page size.
+    startRow:
+      value_template: '{startRow}'
+      type: integer
+      required: true
+      notes: Pagination offset/cursor.
+  runtime_parameters:
+  - name: startRow
+    location: query
+    placeholder: startRow
+    type: integer
+    required: true
+    default_strategy: pagination_counter
+    default_value: 1
+    notes: Managed by pagination logic.
+  response_record_path: $.items[*]
+  rate_limit_per_minute: 60
+  timeout_seconds: 30
+  retry_count: 3
+schema_policy:
+  mode: hybrid
+  flatten_json: true
+  nested_field_separator: _
+  column_case: snake_case
+  include_unmodeled_columns: true
+  allow_schema_evolution: true
+schema:
+  columns:
+    evaluated_at_datetime_utc:
+      type: timestamp
+      nullable: false
+      mask_policy: none
+      source_json_path: evaluated_at_datetime_utc
+      description: Timestamp when the forecast was evaluated (UTC).
+    evaluated_at_datetime_ept:
+      type: timestamp
+      nullable: false
+      mask_policy: none
+      source_json_path: evaluated_at_datetime_ept
+      description: Timestamp when the forecast was evaluated (Eastern Prevailing Time).
+    forecast_datetime_beginning_utc:
+      type: timestamp
+      nullable: false
+      mask_policy: none
+      source_json_path: forecast_datetime_beginning_utc
+      description: Start of the forecasted hourly period (UTC).
+    forecast_datetime_beginning_ept:
+      type: timestamp
+      nullable: false
+      mask_policy: none
+      source_json_path: forecast_datetime_beginning_ept
+      description: Start of the forecasted hourly period (EPT).
+    forecast_datetime_ending_utc:
+      type: timestamp
+      nullable: true
+      mask_policy: none
+      source_json_path: forecast_datetime_ending_utc
+      description: End of the forecasted hourly period (UTC).
+    forecast_datetime_ending_ept:
+      type: timestamp
+      nullable: true
+      mask_policy: none
+      source_json_path: forecast_datetime_ending_ept
+      description: End of the forecasted hourly period (EPT).
+    forecast_area:
+      type: string
+      nullable: false
+      mask_policy: none
+      source_json_path: forecast_area
+      description: Forecast area identifier (e.g., "AE/MIDATL").
+    forecast_load_mw:
+      type: float
+      nullable: true
+      mask_policy: none
+      source_json_path: forecast_load_mw
+      description: Forecasted load in megawatts.
+target:
+  storage_name: minio_bronze
+  zone: bronze
+  format: parquet
+  write_mode: append
+  compression: snappy
+  partition_by:
+  - ingest_year
+  - ingest_month
+  - ingest_day
+audit:
+  dq_checks:
+  - row_count_gt_zero
+  primary_key:
+  - forecast_datetime_beginning_utc
+  - forecast_area
+security:
+  classification: internal
+  contains_bcsi: false
+  contains_pii: false
+  encryption_required: false
+  masking_required: false
+  raw_payload_retention_days: 30
+  access_group: data_platform_users

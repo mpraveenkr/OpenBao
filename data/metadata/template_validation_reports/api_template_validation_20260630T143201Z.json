@@ -1,0 +1,168 @@
+{
+  "created_at_utc": "2026-06-30T14:32:01.534655+00:00",
+  "failed": 2,
+  "files": 6,
+  "folder": "/users/badari/Downloads/api_templates",
+  "passed": 4,
+  "results": [
+    {
+      "errors": [],
+      "file": "/users/badari/Downloads/api_templates/MISO_Forecast_Template_revised.xlsx",
+      "info": {
+        "parameter_set_columns": 3,
+        "parameter_sets": 1,
+        "query_parameters": 2,
+        "response_json_type": "dict",
+        "runtime_parameters": 3,
+        "schema_columns": 8,
+        "sheets": [
+          "Ingestion_Template",
+          "Query_Parameters",
+          "Runtime_Parameters",
+          "Parameter_Sets",
+          "Parameter_Set_Columns",
+          "Schema_Policy",
+          "Schema",
+          "compare_schema",
+          "Response",
+          "Validation_Lists"
+        ]
+      },
+      "status": "pass",
+      "warnings": [],
+      "workbook": "MISO_Forecast_Template_revised.xlsx"
+    },
+    {
+      "errors": [],
+      "file": "/users/badari/Downloads/api_templates/MISO_Realtime_Template.xlsx",
+      "info": {
+        "parameter_set_columns": 3,
+        "parameter_sets": 1,
+        "query_parameters": 2,
+        "response_json_type": "dict",
+        "runtime_parameters": 4,
+        "schema_columns": 8,
+        "sheets": [
+          "Ingestion_Template",
+          "Query_Parameters",
+          "Runtime_Parameters",
+          "Parameter_Sets",
+          "Parameter_Set_Columns",
+          "Schema_Policy",
+          "Schema",
+          "Compare_schema",
+          "Response",
+          "Validation_Lists"
+        ]
+      },
+      "status": "pass",
+      "warnings": [],
+      "workbook": "MISO_Realtime_Template.xlsx"
+    },
+    {
+      "errors": [],
+      "file": "/users/badari/Downloads/api_templates/PJM_Load_Forecast_Template.xlsx",
+      "info": {
+        "parameter_set_columns": 0,
+        "parameter_sets": 0,
+        "query_parameters": 2,
+        "response_json_type": "dict",
+        "runtime_parameters": 1,
+        "schema_columns": 8,
+        "sheets": [
+          "Ingestion_Template",
+          "Query_Parameters",
+          "Runtime_Parameters",
+          "Schema_Policy",
+          "Schema",
+          "compare Schema",
+          "Response"
+        ]
+      },
+      "status": "pass",
+      "warnings": [],
+      "workbook": "PJM_Load_Forecast_Template.xlsx"
+    },
+    {
+      "errors": [],
+      "file": "/users/badari/Downloads/api_templates/PJM_hrl_load_metered_Template_Revised.xlsx",
+      "info": {
+        "parameter_set_columns": 0,
+        "parameter_sets": 0,
+        "query_parameters": 3,
+        "response_json_type": "dict",
+        "runtime_parameters": 2,
+        "schema_columns": 8,
+        "sheets": [
+          "Ingestion_Template",
+          "Query_Parameters",
+          "Runtime_Parameters",
+          "Schema_Policy",
+          "Schema",
+          "compare Schema",
+          "Response"
+        ]
+      },
+      "status": "pass",
+      "warnings": [],
+      "workbook": "PJM_hrl_load_metered_Template_Revised.xlsx"
+    },
+    {
+      "errors": [
+        "Missing API field: response_record_path"
+      ],
+      "file": "/users/badari/Downloads/api_templates/Weather_Archive Template.xlsx",
+      "info": {
+        "parameter_set_columns": 4,
+        "parameter_sets": 2,
+        "query_parameters": 7,
+        "response_json_type": "dict",
+        "runtime_parameters": 4,
+        "schema_columns": 20,
+        "sheets": [
+          "Ingestion_Template",
+          "Query_Parameters",
+          "Runtime_Parameters",
+          "Parameter_Sets",
+          "Parameter_Set_Columns",
+          "Schema_Policy",
+          "Schema",
+          "Compare_schema",
+          "Response"
+        ]
+      },
+      "status": "fail",
+      "warnings": [],
+      "workbook": "Weather_Archive Template.xlsx"
+    },
+    {
+      "errors": [
+        "Missing API field: response_record_path"
+      ],
+      "file": "/users/badari/Downloads/api_templates/Weather_Forecast Template_Updated.xlsx",
+      "info": {
+        "parameter_set_columns": 4,
+        "parameter_sets": 2,
+        "query_parameters": 7,
+        "response_json_type": "dict",
+        "runtime_parameters": 4,
+        "schema_columns": 20,
+        "sheets": [
+          "Ingestion_Template",
+          "Query_Parameters",
+          "Runtime_Parameters",
+          "Parameter_Sets",
+          "Parameter_Set_Columns",
+          "Schema_Policy",
+          "Schema",
+          "Compare_schema",
+          "Response"
+        ]
+      },
+      "status": "fail",
+      "warnings": [],
+      "workbook": "Weather_Forecast Template_Updated.xlsx"
+    }
+  ],
+  "warned": 0
+}

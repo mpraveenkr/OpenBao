@@ -1,0 +1,133 @@
+{
+  "created_at_utc": "2026-07-06T05:23:39.942403+00:00",
+  "dry_run": false,
+  "failures": [],
+  "input": "templates/generated_compact_database_templates/Lawson_WVPA_Historical_SQl_Server_compact.xlsx",
+  "limit": null,
+  "metadata_db": null,
+  "metadata_upserts": 0,
+  "objects_processed": 17,
+  "output_dir": "configs/sources/database_compact_generated",
+  "successes": [
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_wvpa_activity_summary_type",
+      "object_name": "ACTIVITY_SUMMARY_TYPE",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_wvpa_activity_summary_type.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_wvpa_activity_type",
+      "object_name": "ACTIVITY_TYPE",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_wvpa_activity_type.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_wvpa_ar_invoices",
+      "object_name": "AR_INVOICES",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_wvpa_ar_invoices.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_wvpa_ar_invoices_bkup",
+      "object_name": "AR_INVOICES_BKUP",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_wvpa_ar_invoices_bkup.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_wvpa_ar_invoices_dkc",
+      "object_name": "AR_INVOICES_DKC",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_wvpa_ar_invoices_dkc.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_wvpa_ar_invoices_jwd",
+      "object_name": "AR_INVOICES_JWD",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_wvpa_ar_invoices_jwd.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_wvpa_ar_invoice_errors",
+      "object_name": "AR_INVOICE_ERRORS",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_wvpa_ar_invoice_errors.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_wvpa_embarcadero_explain_plan",
+      "object_name": "EMBARCADERO_EXPLAIN_PLAN",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_wvpa_embarcadero_explain_plan.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_wvpa_ferc_rpl_indx",
+      "object_name": "FERC_RPL_INDX",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_wvpa_ferc_rpl_indx.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_wvpa_ferc_rpl_indx_sdsbkup",
+      "object_name": "FERC_RPL_INDX_SDSBKUP",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_wvpa_ferc_rpl_indx_sdsbkup.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_wvpa_ins_asst_category",
+      "object_name": "INS_ASST_CATEGORY",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_wvpa_ins_asst_category.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 1,
+      "object_id": "lawson_erp_wvpa_pospay_stage",
+      "object_name": "POSPAY_STAGE",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_wvpa_pospay_stage.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 1,
+      "object_id": "lawson_erp_wvpa_pospay_xform",
+      "object_name": "POSPAY_XFORM",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_wvpa_pospay_xform.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_wvpa_process_log",
+      "object_name": "PROCESS_LOG",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_wvpa_process_log.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_wvpa_temp",
+      "object_name": "TEMP",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_wvpa_temp.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 0,
+      "object_id": "lawson_erp_wvpa_temp_ar_invoices",
+      "object_name": "TEMP_AR_INVOICES",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_wvpa_temp_ar_invoices.yaml",
+      "source_system": "lawson_erp"
+    },
+    {
+      "columns": 1,
+      "object_id": "lawson_erp_wvpa_tmp_check_recon",
+      "object_name": "TMP_CHECK_RECON",
+      "output_path": "configs/sources/database_compact_generated/lawson_erp_wvpa_tmp_check_recon.yaml",
+      "source_system": "lawson_erp"
+    }
+  ],
+  "yaml_generated": 17
+}

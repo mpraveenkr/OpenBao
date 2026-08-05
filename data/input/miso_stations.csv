@@ -1,0 +1,11 @@
+﻿cat_lrz,id_station,cat_place,cat_state,val_lat,val_lon,cat_grouping
+LRZ1,KMSP,Minneapolis–St Paul,MN,44.88,-93.22,LRZ1
+LRZ2,KMKE,Milwaukee Mitchell,WI,42.95,-87.9,LRZ2_7
+LRZ3,KDSM,Des Moines,IA,41.53,-93.65,LRZ3_5
+LRZ4,KORD,Chicago O’Hare,IL,41.98,-87.9,LRZ4
+LRZ5,KSTL,St. Louis Lambert,MO,38.75,-90.37,LRZ3_5
+LRZ6,KIND,Indianapolis Intl,IN,39.72,-86.29,LRZ6
+LRZ7,KDTW,Detroit Metro,MI,42.21,-83.35,LRZ2_7
+LRZ8,KLIT,Little Rock,AR,34.73,-92.22,LRZ8_9_10
+LRZ9,KMSY,New Orleans,LA,29.99,-90.25,LRZ8_9_10
+LRZ10,KJAN,Jackson,MS,32.31,-90.08,LRZ8_9_10

@@ -1,0 +1,67 @@
+{
+  "created_at_utc": "2026-07-05T02:11:06.774702+00:00",
+  "dry_run": false,
+  "failures": [],
+  "files_seen": 6,
+  "input": "/Users/badari/Downloads/api_templates",
+  "limit": null,
+  "objects_processed": 6,
+  "output": "/private/tmp/api-yaml-sample",
+  "successes": [
+    {
+      "columns": 8,
+      "object_id": "miso_forecast",
+      "object_name": "forecast",
+      "output_path": "/private/tmp/api-yaml-sample/miso_forecast.yaml",
+      "parameter_sets": 0,
+      "source_system": "miso",
+      "workbook": "/Users/badari/Downloads/api_templates/MISO_Forecast_Template.xlsx"
+    },
+    {
+      "columns": 6,
+      "object_id": "miso_realtime",
+      "object_name": "realtime",
+      "output_path": "/private/tmp/api-yaml-sample/miso_realtime.yaml",
+      "parameter_sets": 0,
+      "source_system": "miso",
+      "workbook": "/Users/badari/Downloads/api_templates/MISO_Realtime_Template.xlsx"
+    },
+    {
+      "columns": 8,
+      "object_id": "pjm_load_forecast",
+      "object_name": "load_forecast",
+      "output_path": "/private/tmp/api-yaml-sample/pjm_load_forecast.yaml",
+      "parameter_sets": 0,
+      "source_system": "pjm",
+      "workbook": "/Users/badari/Downloads/api_templates/PJM_Load_Forecast_Template.xlsx"
+    },
+    {
+      "columns": 8,
+      "object_id": "pjm_hrl_load_metered",
+      "object_name": "hrl_load_metered",
+      "output_path": "/private/tmp/api-yaml-sample/pjm_hrl_load_metered.yaml",
+      "parameter_sets": 0,
+      "source_system": "pjm",
+      "workbook": "/Users/badari/Downloads/api_templates/PJM_hrl_load_metered_Template.xlsx"
+    },
+    {
+      "columns": 20,
+      "object_id": "weather_archive",
+      "object_name": "weather_archive",
+      "output_path": "/private/tmp/api-yaml-sample/weather_archive.yaml",
+      "parameter_sets": 2,
+      "source_system": "open_meteo",
+      "workbook": "/Users/badari/Downloads/api_templates/Weather_Archive Template.xlsx"
+    },
+    {
+      "columns": 20,
+      "object_id": "weather_forecast",
+      "object_name": "weather_forecast",
+      "output_path": "/private/tmp/api-yaml-sample/weather_forecast.yaml",
+      "parameter_sets": 2,
+      "source_system": "open_meteo",
+      "workbook": "/Users/badari/Downloads/api_templates/Weather_Forecast Template.xlsx"
+    }
+  ],
+  "yaml_generated": 6
+}

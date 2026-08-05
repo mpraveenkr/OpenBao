@@ -1,0 +1,176 @@
+object_id: lawson_erp_law10_paemployee
+source_system: lawson_erp
+source_type: database
+object_name: PAEMPLOYEE
+enabled: true
+load_strategy: full
+extraction:
+  db_type: sql_server
+  connection_name: lawson_erp_sqlserver_readonly
+  database_name: LAW10
+  schema_name: dbo
+  table_name: PAEMPLOYEE
+  query: SELECT * FROM dbo.PAEMPLOYEE  -- one pass per table; 1911 tables total
+schema_policy:
+  mode: hybrid
+  column_case: snake_case
+  replace_spaces_with: _
+  allow_schema_evolution: true
+  include_unmodeled_columns: true
+  infer_types: true
+  column_discovery: source_metadata
+  type_discovery: source_metadata
+schema:
+  columns:
+    supp_addr1:
+      type: string
+      nullable: false
+      mask_policy: redact
+      source_column_name: SUPP_ADDR1
+    supp_addr2:
+      type: string
+      nullable: false
+      mask_policy: redact
+      source_column_name: SUPP_ADDR2
+    supp_addr3:
+      type: string
+      nullable: false
+      mask_policy: redact
+      source_column_name: SUPP_ADDR3
+    supp_addr4:
+      type: string
+      nullable: false
+      mask_policy: redact
+      source_column_name: SUPP_ADDR4
+    supp_city:
+      type: string
+      nullable: false
+      mask_policy: redact
+      source_column_name: SUPP_CITY
+    supp_zip:
+      type: string
+      nullable: false
+      mask_policy: redact
+      source_column_name: SUPP_ZIP
+    hm_phone_cntry:
+      type: string
+      nullable: false
+      mask_policy: redact
+      source_column_name: HM_PHONE_CNTRY
+    hm_phone_nbr:
+      type: string
+      nullable: false
+      mask_policy: redact
+      source_column_name: HM_PHONE_NBR
+    wk_phone_cntry:
+      type: string
+      nullable: false
+      mask_policy: redact
+      source_column_name: WK_PHONE_CNTRY
+    wk_phone_nbr:
+      type: string
+      nullable: false
+      mask_policy: redact
+      source_column_name: WK_PHONE_NBR
+    wk_phone_ext:
+      type: string
+      nullable: false
+      mask_policy: redact
+      source_column_name: WK_PHONE_EXT
+    birthdate:
+      type: timestamp
+      nullable: false
+      mask_policy: hash
+      source_column_name: BIRTHDATE
+    birth_city:
+      type: string
+      nullable: false
+      mask_policy: redact
+      source_column_name: BIRTH_CITY
+    security_code:
+      type: string
+      nullable: false
+      mask_policy: tokenize
+      source_column_name: SECURITY_CODE
+    exp_date:
+      type: timestamp
+      nullable: false
+      mask_policy: tokenize
+      source_column_name: EXP_DATE
+    sp_emp_addr1:
+      type: string
+      nullable: false
+      mask_policy: redact
+      source_column_name: SP_EMP_ADDR1
+    sp_emp_addr2:
+      type: string
+      nullable: false
+      mask_policy: redact
+      source_column_name: SP_EMP_ADDR2
+    sp_emp_addr3:
+      type: string
+      nullable: false
+      mask_policy: redact
+      source_column_name: SP_EMP_ADDR3
+    sp_emp_addr4:
+      type: string
+      nullable: false
+      mask_policy: redact
+      source_column_name: SP_EMP_ADDR4
+    sp_emp_city:
+      type: string
+      nullable: false
+      mask_policy: redact
+      source_column_name: SP_EMP_CITY
+    sp_emp_zip:
+      type: string
+      nullable: false
+      mask_policy: redact
+      source_column_name: SP_EMP_ZIP
+    work_zip:
+      type: string
+      nullable: false
+      mask_policy: redact
+      source_column_name: WORK_ZIP
+    supp_phone_cnt:
+      type: string
+      nullable: false
+      mask_policy: redact
+      source_column_name: SUPP_PHONE_CNT
+    supp_phone_nbr:
+      type: string
+      nullable: false
+      mask_policy: redact
+      source_column_name: SUPP_PHONE_NBR
+target:
+  storage_name: itron_mv90_bronze
+  zone: bronze
+  format: parquet
+  write_mode: append
+  compression: snappy
+  partition_by:
+  - ingest_year
+  - ingest_month
+  - ingest_day
+audit:
+  dq_checks:
+  - row_count_match_per_table
+  - all_tables_extracted
+  - tokenize_cols_masked
+  - hash_cols_applied
+  - redact_applied_at_silver
+  - sse_kms_encryption_verified
+  - access_group_enforced
+  - no_raw_sensitive_in_target
+  - schema_column_count_match
+  - null_check_key_cols
+  - no_duplicate_rows
+  primary_key: []
+security:
+  classification: confidential
+  contains_bcsi: false
+  contains_pii: true
+  encryption_required: true
+  masking_required: true
+  raw_payload_retention_days: 2555
+  access_group: lawson_law10_data_readers

@@ -1,0 +1,35 @@
+{
+  "created_at_utc": "2026-07-05T01:46:55.716021+00:00",
+  "dry_run": false,
+  "failures": [],
+  "input": "templates/multi_object_database_ingestion_prefilled.xlsx",
+  "limit": 3,
+  "metadata_db": null,
+  "metadata_upserts": 0,
+  "objects_processed": 3,
+  "output_dir": "/private/tmp/normalized-db-yaml-sample",
+  "successes": [
+    {
+      "columns": 9,
+      "object_id": "helper_app_aud_utsprofile_profile_audit",
+      "object_name": "AUD_UTSPROFILE",
+      "output_path": "/private/tmp/normalized-db-yaml-sample/helper_app_aud_utsprofile_profile_audit.yaml",
+      "source_system": "helper_app_sqlserver"
+    },
+    {
+      "columns": 18,
+      "object_id": "helper_app_meter_sdp_service_delivery_point",
+      "object_name": "METER_SDP",
+      "output_path": "/private/tmp/normalized-db-yaml-sample/helper_app_meter_sdp_service_delivery_point.yaml",
+      "source_system": "helper_app_sqlserver"
+    },
+    {
+      "columns": 5,
+      "object_id": "lawson_erp_gen_atfmid",
+      "object_name": "ATFMID",
+      "output_path": "/private/tmp/normalized-db-yaml-sample/lawson_erp_gen_atfmid.yaml",
+      "source_system": "lawson_erp"
+    }
+  ],
+  "yaml_generated": 3
+}

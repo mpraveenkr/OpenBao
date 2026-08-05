@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ingestion-framework"
+version = "0.1.0"
+description = "Metadata-driven local ingestion framework MVP"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "pandas",
+  "pyarrow",
+  "pydantic",
+  "pyyaml",
+  "sqlalchemy",
+  "python-dotenv",
+  "fastapi",
+  "uvicorn",
+  "openpyxl",
+  "boto3",
+  "requests",
+  "psycopg2-binary",
+]
+
+[project.optional-dependencies]
+dev = ["pytest", "httpx"]
+
+[project.scripts]
+ingest-object = "ingestion_framework.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["ingestion_framework*", "metadata_api*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

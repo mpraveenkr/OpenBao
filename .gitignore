@@ -1,0 +1,12 @@
+.venv/
+*.egg-info/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+data/audit/*.db
+data/metadata/*.db
+data/output/
+~$*.xlsx
+deploy/single-node-airflow/.env
+deploy/single-node-airflow/generated/
+.DS_Store

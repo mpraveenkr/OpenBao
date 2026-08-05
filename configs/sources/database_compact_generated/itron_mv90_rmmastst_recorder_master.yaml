@@ -1,0 +1,89 @@
+object_id: itron_mv90_rmmastst_recorder_master
+source_system: itron_mv90
+source_type: database
+object_name: rmmastst_recorder_master
+enabled: true
+load_strategy: incremental
+extraction:
+  db_type: sql_server
+  connection_name: itron_mv90_sqlserver_readonly
+  database_name: MV90
+  schema_name: dbo
+  table_name: RMMASTST
+  query: SELECT * FROM dbo.RMMASTST WHERE LOAD_TSTZ > :last_watermark
+  incremental_column: load_tstz
+  watermark_type: timestamp
+  watermark:
+    column: load_tstz
+    operator: '>'
+    initial_value: '1900-01-01T00:00:00Z'
+    value_type: timestamp
+    timezone: UTC
+    commit_rule: max_extracted_value_after_successful_write
+    late_arriving_overlap: 0 minutes
+schema_policy:
+  mode: hybrid
+  column_case: snake_case
+  replace_spaces_with: _
+  allow_schema_evolution: true
+  include_unmodeled_columns: true
+  infer_types: true
+  column_discovery: source_metadata
+  type_discovery: source_metadata
+schema:
+  columns:
+    recorderid:
+      type: string
+      nullable: false
+      mask_policy: none
+      source_column_name: RECORDERID
+    password1:
+      type: string
+      nullable: true
+      mask_policy: redact
+      source_column_name: PASSWORD1
+    password2:
+      type: string
+      nullable: true
+      mask_policy: redact
+      source_column_name: PASSWORD2
+    localpassword:
+      type: string
+      nullable: true
+      mask_policy: redact
+      source_column_name: LOCALPASSWORD
+    load_tstz:
+      type: timestamp
+      nullable: false
+      mask_policy: none
+      source_column_name: LOAD_TSTZ
+target:
+  storage_name: itron_mv90_bronze
+  zone: bronze
+  format: parquet
+  write_mode: append
+  compression: snappy
+  partition_by:
+  - ingest_year
+  - ingest_month
+  - ingest_day
+audit:
+  dq_checks:
+  - row_count_gt_zero
+  - primary_key_not_null
+  - primary_key_unique
+  - load_tstz_not_null
+  - rowid_unique
+  - changetype_valid_values
+  - passwords_redacted
+  - etl_batch_nbr_not_null
+  primary_key:
+  - recorderid
+security:
+  classification: confidential
+  contains_bcsi: false
+  contains_pii: true
+  encryption_required: true
+  masking_required: true
+  raw_payload_retention_days: 365
+  access_group: itron_mv90_recorder_data_readers

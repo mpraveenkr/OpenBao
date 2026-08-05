@@ -1,0 +1,490 @@
+object_id: itron_mv90_cmmastst_customer_master
+source_system: itron_mv90_sqlserver
+source_type: database
+object_name: mv90
+enabled: true
+load_strategy: incremental
+extraction:
+  db_type: sql_server
+  connection_name: WVP-SQL19-AG
+  schema_name: dbo
+  table_name: CMMASTST
+  query: SELECT * FROM dbo.CMMASTST WHERE LOAD_TSTZ > :last_watermark;
+  incremental_column: load_tstz
+  watermark_type: timestamp
+  fetch_size: 10000
+schema_policy:
+  mode: explicit
+  column_case: snake_case
+  replace_spaces_with: _
+  allow_schema_evolution: true
+  include_unmodeled_columns: false
+  infer_types: false
+schema:
+  columns:
+    customerid:
+      type: string
+      nullable: false
+      mask_policy: none
+      source_column_name: CUSTOMERID
+    name:
+      type: string
+      nullable: true
+      mask_policy: redact
+      source_column_name: NAME
+    addr1:
+      type: string
+      nullable: true
+      mask_policy: redact
+      source_column_name: ADDR1
+    addr2:
+      type: string
+      nullable: true
+      mask_policy: redact
+      source_column_name: ADDR2
+    contact:
+      type: string
+      nullable: true
+      mask_policy: redact
+      source_column_name: CONTACT
+    phone:
+      type: string
+      nullable: true
+      mask_policy: redact
+      source_column_name: PHONE
+    toucode:
+      type: string
+      nullable: true
+      mask_policy: none
+      source_column_name: TOUCODE
+    sic:
+      type: string
+      nullable: true
+      mask_policy: none
+      source_column_name: SIC
+    accountnum:
+      type: string
+      nullable: true
+      mask_policy: none
+      source_column_name: ACCOUNTNUM
+    cycleday:
+      type: string
+      nullable: true
+      mask_policy: none
+      source_column_name: CYCLEDAY
+    calmonth:
+      type: string
+      nullable: true
+      mask_policy: none
+      source_column_name: CALMONTH
+    multiplerecs:
+      type: string
+      nullable: true
+      mask_policy: none
+      source_column_name: MULTIPLERECS
+    strata:
+      type: string
+      nullable: true
+      mask_policy: none
+      source_column_name: STRATA
+    uploadmonth:
+      type: integer
+      nullable: true
+      mask_policy: none
+      source_column_name: UPLOADMONTH
+    uploadday:
+      type: integer
+      nullable: true
+      mask_policy: none
+      source_column_name: UPLOADDAY
+    uploadyear:
+      type: integer
+      nullable: true
+      mask_policy: none
+      source_column_name: UPLOADYEAR
+    uploadhour:
+      type: integer
+      nullable: true
+      mask_policy: none
+      source_column_name: UPLOADHOUR
+    uploadminute:
+      type: integer
+      nullable: true
+      mask_policy: none
+      source_column_name: UPLOADMINUTE
+    logchannels:
+      type: integer
+      nullable: true
+      mask_policy: none
+      source_column_name: LOGCHANNELS
+    mastersched:
+      type: string
+      nullable: true
+      mask_policy: none
+      source_column_name: MASTERSCHED
+    applcode:
+      type: string
+      nullable: true
+      mask_policy: none
+      source_column_name: APPLCODE
+    groupid:
+      type: string
+      nullable: true
+      mask_policy: none
+      source_column_name: GROUPID
+    autoupload:
+      type: string
+      nullable: true
+      mask_policy: none
+      source_column_name: AUTOUPLOAD
+    rate:
+      type: string
+      nullable: true
+      mask_policy: none
+      source_column_name: RATE
+    mfupldpending:
+      type: string
+      nullable: true
+      mask_policy: none
+      source_column_name: MFUPLDPENDING
+    changemonth:
+      type: integer
+      nullable: true
+      mask_policy: none
+      source_column_name: CHANGEMONTH
+    changeday:
+      type: integer
+      nullable: true
+      mask_policy: none
+      source_column_name: CHANGEDAY
+    changeyear:
+      type: integer
+      nullable: true
+      mask_policy: none
+      source_column_name: CHANGEYEAR
+    changehour:
+      type: integer
+      nullable: true
+      mask_policy: none
+      source_column_name: CHANGEHOUR
+    changeminute:
+      type: integer
+      nullable: true
+      mask_policy: none
+      source_column_name: CHANGEMINUTE
+    changetype:
+      type: string
+      nullable: true
+      mask_policy: none
+      source_column_name: CHANGETYPE
+    comment_:
+      type: string
+      nullable: true
+      mask_policy: none
+      source_column_name: COMMENT_
+    priorcustid:
+      type: string
+      nullable: true
+      mask_policy: none
+      source_column_name: PRIORCUSTID
+    mastermeterid:
+      type: string
+      nullable: true
+      mask_policy: none
+      source_column_name: MASTERMETERID
+    pad1:
+      type: string
+      nullable: true
+      mask_policy: none
+      source_column_name: PAD1
+    uploadcutoffhour:
+      type: integer
+      nullable: true
+      mask_policy: none
+      source_column_name: UPLOADCUTOFFHOUR
+    uploadcutoffminute:
+      type: integer
+      nullable: true
+      mask_policy: none
+      source_column_name: UPLOADCUTOFFMINUTE
+    rptstartmonth:
+      type: integer
+      nullable: true
+      mask_policy: none
+      source_column_name: RPTSTARTMONTH
+    rptstartday:
+      type: integer
+      nullable: true
+      mask_policy: none
+      source_column_name: RPTSTARTDAY
+    rptstartyear:
+      type: integer
+      nullable: true
+      mask_policy: none
+      source_column_name: RPTSTARTYEAR
+    rptstarthour:
+      type: integer
+      nullable: true
+      mask_policy: none
+      source_column_name: RPTSTARTHOUR
+    rptstartminute:
+      type: integer
+      nullable: true
+      mask_policy: none
+      source_column_name: RPTSTARTMINUTE
+    rptstopmonth:
+      type: integer
+      nullable: true
+      mask_policy: none
+      source_column_name: RPTSTOPMONTH
+    rptstopday:
+      type: integer
+      nullable: true
+      mask_policy: none
+      source_column_name: RPTSTOPDAY
+    rptstopyear:
+      type: integer
+      nullable: true
+      mask_policy: none
+      source_column_name: RPTSTOPYEAR
+    rptstophour:
+      type: integer
+      nullable: true
+      mask_policy: none
+      source_column_name: RPTSTOPHOUR
+    rptstopminute:
+      type: integer
+      nullable: true
+      mask_policy: none
+      source_column_name: RPTSTOPMINUTE
+    rptbatchfile:
+      type: string
+      nullable: true
+      mask_policy: none
+      source_column_name: RPTBATCHFILE
+    dmdlevel1:
+      type: decimal
+      nullable: true
+      mask_policy: none
+      source_column_name: DMDLEVEL1
+    dmdlevel2:
+      type: decimal
+      nullable: true
+      mask_policy: none
+      source_column_name: DMDLEVEL2
+    pflimit1pct:
+      type: decimal
+      nullable: true
+      mask_policy: none
+      source_column_name: PFLIMIT1PCT
+    pflimit2pct:
+      type: decimal
+      nullable: true
+      mask_policy: none
+      source_column_name: PFLIMIT2PCT
+    pfdmdlimit:
+      type: decimal
+      nullable: true
+      mask_policy: none
+      source_column_name: PFDMDLIMIT
+    billkvar:
+      type: string
+      nullable: true
+      mask_policy: none
+      source_column_name: BILLKVAR
+    lccontract:
+      type: string
+      nullable: true
+      mask_policy: none
+      source_column_name: LCCONTRACT
+    fslgld:
+      type: decimal
+      nullable: true
+      mask_policy: none
+      source_column_name: FSLGLD
+    optionaldata:
+      type: string
+      nullable: true
+      mask_policy: none
+      source_column_name: OPTIONALDATA
+    bbslibrary:
+      type: string
+      nullable: true
+      mask_policy: none
+      source_column_name: BBSLIBRARY
+    pbs:
+      type: string
+      nullable: true
+      mask_policy: none
+      source_column_name: PBS
+    rpcycle:
+      type: string
+      nullable: true
+      mask_policy: none
+      source_column_name: RPCYCLE
+    rptendhour:
+      type: integer
+      nullable: true
+      mask_policy: none
+      source_column_name: RPTENDHOUR
+    rptendminute:
+      type: integer
+      nullable: true
+      mask_policy: none
+      source_column_name: RPTENDMINUTE
+    a1endhour:
+      type: integer
+      nullable: true
+      mask_policy: none
+      source_column_name: A1ENDHOUR
+    a1endminute:
+      type: integer
+      nullable: true
+      mask_policy: none
+      source_column_name: A1ENDMINUTE
+    a1uploadmonth:
+      type: integer
+      nullable: true
+      mask_policy: none
+      source_column_name: A1UPLOADMONTH
+    a1uploadday:
+      type: integer
+      nullable: true
+      mask_policy: none
+      source_column_name: A1UPLOADDAY
+    a1uploadyear:
+      type: integer
+      nullable: true
+      mask_policy: none
+      source_column_name: A1UPLOADYEAR
+    a1uploadhour:
+      type: integer
+      nullable: true
+      mask_policy: none
+      source_column_name: A1UPLOADHOUR
+    a1uploadminute:
+      type: integer
+      nullable: true
+      mask_policy: none
+      source_column_name: A1UPLOADMINUTE
+    a1autoupload:
+      type: string
+      nullable: true
+      mask_policy: none
+      source_column_name: A1AUTOUPLOAD
+    a1cycle:
+      type: string
+      nullable: true
+      mask_policy: none
+      source_column_name: A1CYCLE
+    a1mfpending:
+      type: string
+      nullable: true
+      mask_policy: none
+      source_column_name: A1MFPENDING
+    a2autoupload:
+      type: string
+      nullable: true
+      mask_policy: none
+      source_column_name: A2AUTOUPLOAD
+    a2cycle:
+      type: string
+      nullable: true
+      mask_policy: none
+      source_column_name: A2CYCLE
+    a2mfpending:
+      type: string
+      nullable: true
+      mask_policy: none
+      source_column_name: A2MFPENDING
+    a2endhour:
+      type: integer
+      nullable: true
+      mask_policy: none
+      source_column_name: A2ENDHOUR
+    a2endminute:
+      type: integer
+      nullable: true
+      mask_policy: none
+      source_column_name: A2ENDMINUTE
+    a2uploadmonth:
+      type: integer
+      nullable: true
+      mask_policy: none
+      source_column_name: A2UPLOADMONTH
+    a2uploadday:
+      type: integer
+      nullable: true
+      mask_policy: none
+      source_column_name: A2UPLOADDAY
+    a2uploadyear:
+      type: integer
+      nullable: true
+      mask_policy: none
+      source_column_name: A2UPLOADYEAR
+    a2uploadhour:
+      type: integer
+      nullable: true
+      mask_policy: none
+      source_column_name: A2UPLOADHOUR
+    a2uploadminute:
+      type: integer
+      nullable: true
+      mask_policy: none
+      source_column_name: A2UPLOADMINUTE
+    objectkey:
+      type: string
+      nullable: true
+      mask_policy: none
+      source_column_name: OBJECTKEY
+    username:
+      type: string
+      nullable: true
+      mask_policy: none
+      source_column_name: USERNAME
+    padding:
+      type: string
+      nullable: true
+      mask_policy: none
+      source_column_name: PADDING
+    etl_batch_nbr:
+      type: integer
+      nullable: true
+      mask_policy: none
+      source_column_name: ETL_BATCH_NBR
+    load_tstz:
+      type: timestamp
+      nullable: false
+      mask_policy: none
+      source_column_name: LOAD_TSTZ
+    rowid:
+      type: string
+      nullable: false
+      mask_policy: none
+      source_column_name: ROWID
+target:
+  storage_name: itron_mv90_bronze
+  zone: bronze
+  format: parquet
+  write_mode: append
+  compression: snappy
+  partition_by:
+  - ingest_year
+  - ingest_month
+  - ingest_day
+audit:
+  dq_checks:
+  - row_count_gt_zero
+  - primary_key_not_null
+  - primary_key_unique
+  - load_tstz_not_null
+  primary_key:
+  - customerid
+security:
+  classification: confidential
+  contains_bcsi: false
+  contains_pii: true
+  encryption_required: true
+  masking_required: true
+  raw_payload_retention_days: 365
+  access_group: itron_mv90_customer_data_readers

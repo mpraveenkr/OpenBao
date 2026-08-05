@@ -1,0 +1,89 @@
+# Ingestion Framework — Azure DevOps CI/CD Pipeline
+#
+# This pipeline is intended for a self-hosted Ubuntu agent that can run Docker
+# Compose against the single-node Airflow deployment folder.
+
+trigger:
+  branches:
+    include:
+      - main
+      - develop
+      - feature/*
+      - fix/*
+
+pr:
+  branches:
+    include:
+      - main
+      - develop
+
+pool:
+  name: single-node-airflow-agents
+
+variables:
+  COMPOSE_DIR: "$(Build.SourcesDirectory)/deploy/single-node-airflow"
+  AIRFLOW_PORT: "8080"
+  PYTHON_VERSION: "3.11"
+
+steps:
+  - script: |
+      echo "================================================"
+      echo "  Branch : $(Build.SourceBranch)"
+      echo "  Commit : $(Build.SourceVersion)"
+      echo "  Run by : $(Build.RequestedFor)"
+      echo "================================================"
+    displayName: "1 · Show run info"
+
+  - script: |
+      python3 --version
+      python3 -m venv .venv
+      . .venv/bin/activate
+      python -m pip install --upgrade pip
+      python -m pip install -e ".[dev]"
+      python -m pytest
+    displayName: "2 · Run Python tests"
+
+  - script: |
+      cd "$(COMPOSE_DIR)"
+      test -f .env
+      docker compose --env-file .env config >/dev/null
+    displayName: "3 · Validate Compose configuration"
+
+  - script: |
+      cd "$(COMPOSE_DIR)"
+      docker compose --env-file .env down --remove-orphans || true
+    displayName: "4 · Stop existing containers"
+    condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+
+  - script: |
+      cd "$(COMPOSE_DIR)"
+      docker compose --env-file .env up -d --build
+    displayName: "5 · Build and start containers"
+    condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+
+  - script: |
+      echo "Waiting for Airflow to be ready (checks every 15 seconds, up to 5 minutes)..."
+      for i in {1..20}; do
+        if curl -sf "http://localhost:$(AIRFLOW_PORT)/health" >/dev/null 2>&1; then
+          echo "Airflow is up and healthy. Deployment succeeded."
+          exit 0
+        fi
+        echo "  Attempt $i of 20 — not ready yet, waiting 15 seconds..."
+        sleep 15
+      done
+      echo ""
+      echo "ERROR: Airflow did not start within 5 minutes."
+      echo "Printing recent Airflow logs to help diagnose the problem:"
+      cd "$(COMPOSE_DIR)"
+      docker compose --env-file .env logs --tail=80 airflow-webserver
+      exit 1
+    displayName: "6 · Wait for Airflow health"
+    condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+
+  - script: |
+      echo "================================================"
+      echo "  REGRESSION CHECK — main branch"
+      echo "  Tests passed and Airflow deployment is healthy."
+      echo "================================================"
+    displayName: "7 · Regression marker"
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))

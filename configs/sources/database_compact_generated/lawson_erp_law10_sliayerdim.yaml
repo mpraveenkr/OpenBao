@@ -1,0 +1,56 @@
+object_id: lawson_erp_law10_sliayerdim
+source_system: lawson_erp
+source_type: database
+object_name: SLIAYERDIM
+enabled: true
+load_strategy: full
+extraction:
+  db_type: sql_server
+  connection_name: lawson_erp_sqlserver_readonly
+  database_name: LAW10
+  schema_name: dbo
+  table_name: SLIAYERDIM
+  query: SELECT * FROM dbo.SLIAYERDIM  -- one pass per table; 1911 tables total
+schema_policy:
+  mode: infer
+  column_case: snake_case
+  replace_spaces_with: _
+  allow_schema_evolution: true
+  include_unmodeled_columns: true
+  infer_types: true
+  column_discovery: source_metadata
+  type_discovery: source_metadata
+schema:
+  columns: {}
+target:
+  storage_name: itron_mv90_bronze
+  zone: bronze
+  format: parquet
+  write_mode: append
+  compression: snappy
+  partition_by:
+  - ingest_year
+  - ingest_month
+  - ingest_day
+audit:
+  dq_checks:
+  - row_count_match_per_table
+  - all_tables_extracted
+  - tokenize_cols_masked
+  - hash_cols_applied
+  - redact_applied_at_silver
+  - sse_kms_encryption_verified
+  - access_group_enforced
+  - no_raw_sensitive_in_target
+  - schema_column_count_match
+  - null_check_key_cols
+  - no_duplicate_rows
+  primary_key: []
+security:
+  classification: confidential
+  contains_bcsi: false
+  contains_pii: false
+  encryption_required: true
+  masking_required: false
+  raw_payload_retention_days: 2555
+  access_group: lawson_law10_data_readers

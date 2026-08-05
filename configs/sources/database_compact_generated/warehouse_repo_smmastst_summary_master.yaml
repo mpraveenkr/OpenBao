@@ -1,0 +1,74 @@
+object_id: warehouse_repo_smmastst_summary_master
+source_system: warehouse_repo
+source_type: database
+object_name: REPO.SMMASTST
+enabled: true
+load_strategy: incremental
+extraction:
+  db_type: sql_server
+  connection_name: warehouse_sqlserver_readonly
+  database_name: REPO
+  schema_name: REPO
+  table_name: SMMASTST
+  query: SELECT * FROM REPO.SMMASTST WHERE LOAD_TSTZ > :last_watermark
+  incremental_column: load_tstz
+  watermark_type: timestamp
+  watermark:
+    column: load_tstz
+    operator: '>'
+    initial_value: '1900-01-01T00:00:00Z'
+    value_type: timestamp
+    timezone: UTC
+    commit_rule: max_extracted_value_after_successful_write
+    late_arriving_overlap: 0 minutes
+schema_policy:
+  mode: hybrid
+  column_case: snake_case
+  replace_spaces_with: _
+  allow_schema_evolution: true
+  include_unmodeled_columns: true
+  infer_types: true
+  column_discovery: source_metadata
+  type_discovery: source_metadata
+schema:
+  columns:
+    smmastst_id:
+      type: integer
+      nullable: false
+      mask_policy: none
+      source_column_name: SMMASTST_ID
+    load_tstz:
+      type: timestamp
+      nullable: true
+      mask_policy: none
+      source_column_name: LOAD_TSTZ
+target:
+  storage_name: warehouse_repo_storage
+  zone: warehouse_repo
+  format: parquet
+  write_mode: append
+  compression: snappy
+  partition_by:
+  - ingest_year
+  - ingest_month
+  - ingest_day
+audit:
+  dq_checks:
+  - row_count_gt_zero
+  - primary_key_not_null
+  - primary_key_unique
+  - rowid_unique
+  - load_tstz_not_null
+  - no_future_load_tstz
+  - etl_batch_nbr_populated
+  - begin_ts_not_null
+  primary_key:
+  - smmastst_id
+security:
+  classification: confidential
+  contains_bcsi: false
+  contains_pii: false
+  encryption_required: true
+  masking_required: false
+  raw_payload_retention_days: 2555
+  access_group: warehouse_metering_data_readers
