@@ -2,6 +2,7 @@
 
 This deployment layer bootstraps the single-node data lake platform for the ingestion framework:
 
+- OpenBao holding the runtime credentials the ingestion jobs read
 - Postgres for Airflow metadata and ingestion framework metadata
 - MinIO object storage with bronze, landing, silver, gold, and quarantine buckets
 - Airflow running a custom image that installs this repository as a Python package
@@ -85,8 +86,11 @@ The installer validates that `/mnt/fast_data` and `/mnt/data_lake` are mounted f
 
 ## OpenBao runtime secrets
 
-Generated ingestion DAGs run the framework inside Airflow. Those jobs now expect
-runtime credentials to live in OpenBao:
+OpenBao runs as part of this stack. `docker compose up` starts the `openbao`
+server and then a one-shot `openbao-bootstrap` that provisions it, so no manual
+`bao operator init` or `bao kv put` is needed for a first deployment.
+
+Generated ingestion DAGs read their runtime credentials from OpenBao:
 
 - `configs/storage_minio.yaml` stores `access_key_ref` and `secret_key_ref`, not raw MinIO keys.
 - API templates can use `api_key_secret_ref`.
@@ -100,32 +104,96 @@ OPENBAO_ADDR
 OPENBAO_TOKEN_FILE=/run/secrets/openbao_token
 ```
 
-The token file is mounted from `OPENBAO_TOKEN_FILE_PATH`, which defaults to:
+### What the bootstrap does
+
+On first start it initializes OpenBao, then on every start it re-checks each
+step, so `docker compose up` is safe to repeat:
+
+1. Runs `bao operator init` and writes the root token and recovery keys to `OPENBAO_INIT_FILE_PATH`.
+2. Enables the KV v2 engine at `secret/`.
+3. Applies an `ingestion-framework` policy granting **read only** on `secret/data/ingestion-framework/*`.
+4. Issues a periodic token with that policy to `OPENBAO_TOKEN_FILE_PATH`, owned by the Airflow UID.
+5. Seeds the MinIO and audit secrets from the values in `.env`, **only if they do not already exist**.
+6. Verifies the issued token can read what it seeded.
+
+Because step 5 never overwrites an existing secret, values you change later with
+`bao kv put` survive subsequent restarts.
+
+`airflow-init` waits for the bootstrap to finish, so Airflow never starts
+against a missing or stale token.
+
+### Back up the init file
 
 ```text
-/mnt/fast_data/openbao/ingestion-framework.token
+/mnt/fast_data/openbao/init.json
 ```
 
-Create that token outside this repository using your OpenBao operational
-process, and grant it read access only to the ingestion framework paths it needs.
+This holds the OpenBao root token and recovery keys. Copy it somewhere safe and
+restrict access to it. Without it you cannot administer OpenBao, and the
+bootstrap cannot reconfigure the server on a later run.
 
-Example seed values:
+### Unseal keys
+
+By default OpenBao uses a static seal so it unseals itself after a reboot,
+which matters here because the ingestion DAGs are unattended. The key lives in
+its own file, not in `.env` and not in the generated config:
+
+```text
+/mnt/fast_data/openbao/unseal.env   (mode 600)
+```
+
+Back this file up too. **Losing it makes the OpenBao data directory
+unreadable**, and rotating it has the same effect on existing data.
+
+To require a manual unseal after every restart instead:
 
 ```bash
-bao kv put -mount=secret ingestion-framework/minio \
-  access_key='<minio-user>' \
-  secret_key='<minio-password>'
+python3 install_platform.py --openbao-shamir
+```
 
-bao kv put -mount=secret ingestion-framework/audit \
-  url='postgresql+psycopg2://ingestion_app:<password>@postgres:5432/ingestion_metadata'
+In that mode the stack stays sealed until you run:
 
-bao kv put -mount=secret ingestion-framework/api/pjm \
+```bash
+docker compose exec openbao bao operator unseal
+docker compose up openbao-bootstrap
+```
+
+### Seeding additional secrets
+
+Source credentials beyond MinIO and audit are still added by hand. Use the
+`ingestion-framework/` prefix so the policy covers them:
+
+```bash
+docker compose exec openbao bao kv put -mount=secret ingestion-framework/api/pjm \
   subscription_key='<pjm-key>'
 
-bao kv put -mount=secret ingestion-framework/database/itron_mv90_sqlserver_readonly \
+docker compose exec openbao bao kv put -mount=secret ingestion-framework/database/itron_mv90_sqlserver_readonly \
   username='<readonly-user>' \
   password='<readonly-password>'
 ```
+
+Authenticate with the root token from the init file first.
+
+### Verifying the wiring
+
+Confirm a config's secrets resolve before trusting a scheduled run. This prints
+pass or fail per reference and never prints a secret value:
+
+```bash
+docker compose exec airflow-scheduler ingest-object check-secrets \
+  --config configs/sources/api_generated/pjm_load_forecast.yaml \
+  --storage configs/storage_minio.yaml \
+  --audit-db env:INGESTION_AUDIT_DB_URL
+```
+
+It exits non-zero if any reference fails to resolve.
+
+### Access and TLS
+
+The OpenBao port is published to `127.0.0.1:8200` only, and the listener runs
+without TLS because traffic stays on the Compose network. If you expose it
+beyond the host, terminate TLS and point the framework at the CA with
+`OPENBAO_CACERT`.
 
 ## Generated secrets
 
@@ -141,6 +209,18 @@ The installer only rotates generated platform bootstrap secrets when explicitly 
 
 ```bash
 python3 install_platform.py --rotate-secrets
+```
+
+That flag also rotates the OpenBao unseal key, which makes the existing OpenBao
+data directory unreadable. To rotate platform passwords while keeping OpenBao
+storage intact, restore the previous `unseal.env` afterwards. Note that rotating
+`MINIO_ROOT_PASSWORD` does not update the copy already stored in OpenBao, since
+the bootstrap does not overwrite existing secrets; update it explicitly:
+
+```bash
+docker compose exec openbao bao kv put -mount=secret ingestion-framework/minio \
+  access_key='<minio-user>' \
+  secret_key='<new-minio-password>'
 ```
 
 The generated Postgres users are:

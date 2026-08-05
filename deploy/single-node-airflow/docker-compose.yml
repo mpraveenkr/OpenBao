@@ -1,4 +1,66 @@
 services:
+  openbao:
+    image: ${OPENBAO_IMAGE}
+    container_name: ingestion_openbao
+    # Start as root so the entrypoint can correct ownership of the bind-mounted
+    # data directory. It always drops to the unprivileged `openbao` user before
+    # starting the server, so OpenBao itself does not run as root.
+    user: "0:0"
+    cap_add:
+      - IPC_LOCK
+    command: server -config=/openbao/config/openbao.hcl
+    environment:
+      BAO_ADDR: http://127.0.0.1:8200
+    # Supplies OPENBAO_UNSEAL_KEY for the static seal. The key is kept here
+    # rather than in openbao.hcl because the server reads its config after
+    # dropping privileges, so the config file cannot be root-only.
+    env_file:
+      - ${OPENBAO_UNSEAL_ENV_FILE}
+    volumes:
+      - ./generated/openbao.hcl:/openbao/config/openbao.hcl:ro
+      - ${OPENBAO_DATA_PATH}:/openbao/data
+    ports:
+      - "${OPENBAO_HOST_BIND:-127.0.0.1}:${OPENBAO_HOST_PORT:-8200}:8200"
+    restart: unless-stopped
+    healthcheck:
+      # `bao status` exits 0 when unsealed and 2 when sealed or uninitialized.
+      # Both mean the API is answering, which is the condition the bootstrap
+      # needs: it cannot initialize a server that must already be unsealed.
+      test: ["CMD-SHELL", "bao status >/dev/null 2>&1; code=$$?; [ $$code -eq 0 ] || [ $$code -eq 2 ]"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  openbao-bootstrap:
+    image: ${OPENBAO_IMAGE}
+    container_name: ingestion_openbao_bootstrap
+    # Runs as root to write the token file and hand it to the Airflow UID.
+    user: "0:0"
+    depends_on:
+      openbao:
+        condition: service_healthy
+    environment:
+      BAO_ADDR: ${OPENBAO_ADDR}
+      OPENBAO_SEAL_MODE: ${OPENBAO_SEAL_MODE}
+      OPENBAO_KV_MOUNT: ${OPENBAO_KV_MOUNT}
+      OPENBAO_SECRET_PREFIX: ${OPENBAO_SECRET_PREFIX}
+      OPENBAO_POLICY_NAME: ${OPENBAO_POLICY_NAME}
+      OPENBAO_TOKEN_PERIOD: ${OPENBAO_TOKEN_PERIOD}
+      OPENBAO_RECOVERY_SHARES: ${OPENBAO_RECOVERY_SHARES}
+      OPENBAO_RECOVERY_THRESHOLD: ${OPENBAO_RECOVERY_THRESHOLD}
+      AIRFLOW_UID: ${AIRFLOW_UID}
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+      INGESTION_DB_NAME: ${INGESTION_DB_NAME}
+      INGESTION_DB_USER: ${INGESTION_DB_USER}
+      INGESTION_DB_PASSWORD: ${INGESTION_DB_PASSWORD}
+    entrypoint: ["/bin/sh", "/bootstrap/openbao-bootstrap.sh"]
+    volumes:
+      - ./generated/openbao-bootstrap.sh:/bootstrap/openbao-bootstrap.sh:ro
+      - ${OPENBAO_TOKEN_FILE_PATH}:/run/openbao/ingestion.token
+      - ${OPENBAO_INIT_FILE_PATH}:/run/openbao/init.json
+    restart: "no"
+
   postgres:
     image: postgres:15.8-alpine
     container_name: ingestion_postgres
@@ -78,6 +140,10 @@ services:
       postgres:
         condition: service_healthy
       minio-bootstrap:
+        condition: service_completed_successfully
+      # Airflow bind-mounts the OpenBao token, so it must not start until the
+      # bootstrap has written a valid one.
+      openbao-bootstrap:
         condition: service_completed_successfully
     environment: &airflow-env
       AIRFLOW__CORE__EXECUTOR: LocalExecutor

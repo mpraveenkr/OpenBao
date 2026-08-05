@@ -28,7 +28,7 @@ def create_persistence_stores(
     base_dir: str | Path | None = None,
 ) -> PersistenceStores:
     """Create audit and watermark stores from a SQLite path or Postgres URL."""
-    value = _resolve_env_reference(str(audit_db)).strip()
+    value = resolve_audit_db_reference(str(audit_db)).strip()
     if _is_postgres_url(value):
         database_url = _normalize_postgres_url(value)
         return PersistenceStores(
@@ -43,7 +43,8 @@ def create_persistence_stores(
     )
 
 
-def _resolve_env_reference(value: str) -> str:
+def resolve_audit_db_reference(value: str) -> str:
+    """Resolve an --audit-db value that may be an OpenBao reference or env:NAME."""
     resolved = resolve_value(value)
     if resolved != value:
         return str(resolved)

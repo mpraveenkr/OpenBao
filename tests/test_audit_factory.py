@@ -118,7 +118,7 @@ class FakeSession:
     def __init__(self, payload: dict) -> None:
         self.payload = payload
 
-    def get(self, url: str, headers: dict[str, str], timeout: int):
+    def get(self, url: str, headers: dict[str, str], timeout: int, verify=True):
         return FakeResponse(self.payload)
 
 

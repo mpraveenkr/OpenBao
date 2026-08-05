@@ -96,16 +96,27 @@ python3 install_platform.py --yes --skip-docker-install
 docker compose --env-file .env up -d --build
 ```
 
-The deployment expects OpenBao runtime access for ingestion credentials:
+The stack runs its own OpenBao and provisions it automatically: the
+`openbao-bootstrap` service initializes the server, applies a read-only policy,
+issues the token Airflow uses, and seeds the MinIO and audit secrets from `.env`.
+
+Two files it creates need backing up, both under `/mnt/fast_data/openbao/`:
 
 ```text
-OPENBAO_ADDR
-OPENBAO_TOKEN_FILE_PATH
-INGESTION_AUDIT_DB_URL_REF
+init.json    OpenBao root token and recovery keys
+unseal.env   static seal key; losing it makes OpenBao storage unreadable
 ```
 
-Create the OpenBao token file outside the repository and grant it read access
-only to the ingestion framework secret paths.
+Confirm the credentials resolve before relying on a scheduled run:
+
+```bash
+docker compose exec airflow-scheduler ingest-object check-secrets \
+  --storage configs/storage_minio.yaml \
+  --audit-db env:INGESTION_AUDIT_DB_URL
+```
+
+See `deploy/single-node-airflow/README.md` for seeding additional source
+credentials and for the manual-unseal option.
 
 ## If the pipeline fails
 
