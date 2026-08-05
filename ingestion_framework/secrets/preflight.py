@@ -78,12 +78,34 @@ def check_requirements(requirements: list[SecretRequirement]) -> list[SecretChec
 
 
 def _storage_requirements(storage: Any) -> list[SecretRequirement]:
-    if storage.type not in {"s3", "s3_compatible"}:
-        return []
-    return [
-        SecretRequirement("storage access key", str(storage.access_key_ref), False),
-        SecretRequirement("storage secret key", str(storage.secret_key_ref), False),
+    if storage.type in {"s3", "s3_compatible"}:
+        return [
+            SecretRequirement("storage access key", str(storage.access_key_ref), False),
+            SecretRequirement("storage secret key", str(storage.secret_key_ref), False),
+        ]
+    if storage.type in {"adls_gen2", "adls"}:
+        return _adls_requirements(storage)
+    return []
+
+
+def _adls_requirements(storage: Any) -> list[SecretRequirement]:
+    from ingestion_framework.secrets.resolver import is_secret_reference
+
+    if (storage.auth_method or "service_principal").strip() == "account_key":
+        return [SecretRequirement("ADLS account key", str(storage.account_key_ref), False)]
+
+    requirements = [
+        SecretRequirement("ADLS client secret", str(storage.client_secret_ref), False)
     ]
+    # Tenant and client IDs may be inline identifiers, so only check the ones
+    # that actually point at OpenBao.
+    for label, value in (
+        ("ADLS tenant id", storage.tenant_id),
+        ("ADLS client id", storage.client_id),
+    ):
+        if value and is_secret_reference(str(value)):
+            requirements.append(SecretRequirement(label, str(value), False))
+    return requirements
 
 
 def _source_requirements(source: Any) -> list[SecretRequirement]:

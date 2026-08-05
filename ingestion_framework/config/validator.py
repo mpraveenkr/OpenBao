@@ -127,6 +127,16 @@ class StorageConfig(BaseModel):
     access_key_ref: str | None = None
     secret_key_ref: str | None = None
     region: str = "us-east-1"
+    # Azure Data Lake Storage Gen2. tenant_id and client_id are identifiers and
+    # may be inline; the client secret and account key must be OpenBao
+    # references so a credential cannot be committed to a config file.
+    account_name: str | None = None
+    filesystem: str | None = None
+    auth_method: str | None = None
+    tenant_id: str | None = None
+    client_id: str | None = None
+    client_secret_ref: str | None = None
+    account_key_ref: str | None = None
     encryption: EncryptionConfig = Field(default_factory=EncryptionConfig)
 
     @model_validator(mode="after")
@@ -135,18 +145,37 @@ class StorageConfig(BaseModel):
             if not self.base_path:
                 raise ValueError("Local storage requires base_path")
         elif self.type in {"s3_compatible", "s3"}:
-            missing = [
-                field
-                for field in ["bucket", "endpoint_url", "access_key_ref", "secret_key_ref"]
-                if not getattr(self, field)
-            ]
-            if missing:
-                raise ValueError(
-                    "S3-compatible storage requires: " + ", ".join(missing)
-                )
+            self._require_fields(
+                ["bucket", "endpoint_url", "access_key_ref", "secret_key_ref"],
+                "S3-compatible storage",
+            )
+        elif self.type in {"adls_gen2", "adls"}:
+            self._validate_adls_fields()
         else:
             raise ValueError(f"Unsupported storage type: {self.type}")
         return self
+
+    def _validate_adls_fields(self) -> None:
+        self._require_fields(["account_name", "filesystem"], "ADLS Gen2 storage")
+
+        auth_method = (self.auth_method or "service_principal").strip()
+        if auth_method == "service_principal":
+            self._require_fields(
+                ["tenant_id", "client_id", "client_secret_ref"],
+                "ADLS Gen2 service principal auth",
+            )
+        elif auth_method == "account_key":
+            self._require_fields(["account_key_ref"], "ADLS Gen2 account key auth")
+        else:
+            raise ValueError(
+                f"Unsupported ADLS Gen2 auth_method: {auth_method}. "
+                "Supported values are: service_principal, account_key"
+            )
+
+    def _require_fields(self, fields: list[str], label: str) -> None:
+        missing = [field for field in fields if not getattr(self, field)]
+        if missing:
+            raise ValueError(f"{label} requires: " + ", ".join(missing))
 
 
 class StorageRegistryConfig(BaseModel):

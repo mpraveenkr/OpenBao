@@ -314,18 +314,78 @@ def install_ca_certificate(yes: bool) -> None:
     log_success("CA installed on host and copied into deployment config.")
 
 
-def install_docker() -> None:
-    if shutil.which("docker"):
-        log_success("Docker is already installed.")
-        return
-    log_info("Installing Docker Engine and Compose plugin.")
+def command_exists(name: str) -> bool:
+    return shutil.which(name) is not None
+
+
+def docker_engine_installed() -> bool:
+    return command_exists("docker")
+
+
+def docker_compose_v2_installed() -> bool:
+    """Check for the Compose v2 plugin specifically.
+
+    A host can have the `docker` binary, or even the old `docker-compose` v1
+    script, without the v2 plugin this stack invokes as `docker compose`.
+    """
+    if not docker_engine_installed():
+        return False
+    return run_cmd(["docker", "compose", "version"], check=False).returncode == 0
+
+
+def docker_daemon_running() -> bool:
+    if not docker_engine_installed():
+        return False
+    if run_cmd(["docker", "info"], check=False).returncode == 0:
+        return True
+    return run_cmd(["docker", "info"], sudo=True, check=False).returncode == 0
+
+
+def docker_accessible_without_sudo() -> bool:
+    if not docker_engine_installed():
+        return False
+    return run_cmd(["docker", "info"], check=False).returncode == 0
+
+
+def invoking_user() -> str:
+    return os.environ.get("SUDO_USER") or os.environ.get("USER") or EXPECTED_USER
+
+
+def require_apt() -> None:
+    if not command_exists("apt-get"):
+        log_error(
+            "This installer provisions Docker through apt and expects Ubuntu or Debian. "
+            "Install Docker Engine and the Compose v2 plugin manually, then re-run with "
+            "--skip-docker-install."
+        )
+        raise SystemExit(1)
+
+
+def install_apt_prerequisites() -> None:
+    missing = [name for name in ("curl", "gpg") if not command_exists(name)]
+    log_info("Installing Docker repository prerequisites.")
     run_cmd(["apt-get", "update"], sudo=True)
     run_cmd(
-        ["apt-get", "install", "-y", "apt-transport-https", "ca-certificates", "curl", "gnupg", "lsb-release"],
+        [
+            "apt-get",
+            "install",
+            "-y",
+            "apt-transport-https",
+            "ca-certificates",
+            "curl",
+            "gnupg",
+            "lsb-release",
+        ],
         sudo=True,
     )
+    if missing:
+        log_success(f"Installed missing prerequisite command(s): {', '.join(missing)}.")
+
+
+def configure_docker_apt_repository() -> None:
+    log_info("Configuring the Docker apt repository.")
     run_cmd(["install", "-m", "0755", "-d", "/etc/apt/keyrings"], sudo=True)
-    run_cmd(
+    result = run_cmd(
         [
             "bash",
             "-c",
@@ -333,7 +393,17 @@ def install_docker() -> None:
             "| gpg --dearmor --yes -o /etc/apt/keyrings/docker.gpg",
         ],
         sudo=True,
+        check=False,
     )
+    if result.returncode != 0:
+        log_error(
+            "Could not download the Docker signing key from download.docker.com. "
+            "If this host reaches the internet through a proxy or an inspecting "
+            "firewall, configure that first, or install Docker from your internal "
+            "mirror and re-run with --skip-docker-install."
+        )
+        raise SystemExit(1)
+
     arch = run_cmd(["dpkg", "--print-architecture"]).stdout.strip()
     codename = run_cmd(["lsb_release", "-cs"]).stdout.strip()
     repo = (
@@ -342,10 +412,100 @@ def install_docker() -> None:
     )
     run_cmd(["bash", "-c", f"echo '{repo}' > /etc/apt/sources.list.d/docker.list"], sudo=True)
     run_cmd(["apt-get", "update"], sudo=True)
-    run_cmd(["apt-get", "install", "-y", "docker-ce", "docker-ce-cli", "containerd.io", "docker-compose-plugin"], sudo=True)
+
+
+def install_docker_packages(packages: list[str]) -> None:
+    log_info(f"Installing: {', '.join(packages)}.")
+    run_cmd(["apt-get", "install", "-y", *packages], sudo=True)
+
+
+def ensure_docker_daemon() -> None:
+    if docker_daemon_running():
+        log_success("Docker daemon is running.")
+        return
+    log_info("Starting and enabling the Docker daemon.")
     run_cmd(["systemctl", "enable", "--now", "docker"], sudo=True)
-    run_cmd(["usermod", "-aG", "docker", EXPECTED_USER], sudo=True)
-    log_success("Docker Engine and Compose plugin installed.")
+    if not docker_daemon_running():
+        log_error(
+            "The Docker daemon is installed but not reachable. "
+            "Inspect it with: systemctl status docker"
+        )
+        raise SystemExit(1)
+    log_success("Docker daemon is running.")
+
+
+def ensure_docker_group_membership() -> None:
+    user = invoking_user()
+    if docker_accessible_without_sudo():
+        log_success(f"'{user}' can reach the Docker daemon.")
+        return
+
+    log_info(f"Adding '{user}' to the docker group.")
+    run_cmd(["usermod", "-aG", "docker", user], sudo=True)
+    log_warning(
+        f"'{user}' was added to the docker group, which only takes effect in a new "
+        "login session. This run will use sudo for Docker commands. Log out and back "
+        "in, or run 'newgrp docker', before using docker compose directly."
+    )
+
+
+def install_docker(skip_install: bool) -> None:
+    """Ensure Docker Engine, the Compose v2 plugin, and the daemon are usable.
+
+    Each component is checked independently: a host can have the docker binary
+    without the Compose v2 plugin, or both without a running daemon, and the
+    stack needs all three.
+    """
+    engine = docker_engine_installed()
+    compose = docker_compose_v2_installed()
+
+    if engine:
+        log_success("Docker Engine is already installed.")
+    if compose:
+        log_success("Docker Compose v2 plugin is already installed.")
+    elif engine and command_exists("docker-compose"):
+        log_warning(
+            "Found Compose v1 (docker-compose) but not the v2 plugin. "
+            "This deployment requires 'docker compose'."
+        )
+
+    if engine and compose:
+        ensure_docker_daemon()
+        ensure_docker_group_membership()
+        return
+
+    if skip_install:
+        missing = []
+        if not engine:
+            missing.append("Docker Engine")
+        if not compose:
+            missing.append("Docker Compose v2 plugin")
+        log_error(
+            f"Missing required component(s): {', '.join(missing)}. "
+            "Install them, or re-run without --skip-docker-install."
+        )
+        raise SystemExit(1)
+
+    require_apt()
+    install_apt_prerequisites()
+    configure_docker_apt_repository()
+
+    packages = ["docker-ce", "docker-ce-cli", "containerd.io", "docker-compose-plugin"]
+    if not engine:
+        # buildx backs `docker compose build` on current Docker releases.
+        packages.append("docker-buildx-plugin")
+    install_docker_packages(packages)
+
+    if not docker_compose_v2_installed():
+        log_error(
+            "The Docker Compose v2 plugin is still unavailable after installation. "
+            "Check that the docker-compose-plugin package installed correctly."
+        )
+        raise SystemExit(1)
+
+    ensure_docker_daemon()
+    ensure_docker_group_membership()
+    log_success("Docker Engine and Compose v2 plugin are installed and running.")
 
 
 def create_directories(values: dict[str, str]) -> None:
@@ -675,14 +835,26 @@ def sync_ingestion_dags(values: dict[str, str]) -> None:
 
 def compose_config() -> None:
     log_info("Validating Docker Compose configuration.")
-    run_cmd(["docker", "compose", "--env-file", ".env", "config"], check=True, cwd=DEPLOY_DIR)
+    # A freshly added docker group membership does not apply to this session,
+    # so fall back to sudo rather than failing on a permission error.
+    needs_sudo = not docker_accessible_without_sudo()
+    run_cmd(
+        ["docker", "compose", "--env-file", ".env", "config"],
+        sudo=needs_sudo,
+        check=True,
+        cwd=DEPLOY_DIR,
+    )
     log_success("Docker Compose configuration is valid.")
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Bootstrap the single-node Airflow ingestion platform.")
     parser.add_argument("--yes", action="store_true", help="Accept prompts for non-destructive choices.")
-    parser.add_argument("--skip-docker-install", action="store_true", help="Do not install Docker if missing.")
+    parser.add_argument(
+        "--skip-docker-install",
+        action="store_true",
+        help="Do not install Docker. Fails if Docker Engine or the Compose v2 plugin is missing.",
+    )
     parser.add_argument("--skip-mount-check", action="store_true", help="Do not require /mnt paths to be mounted.")
     parser.add_argument("--rotate-secrets", action="store_true", help="Regenerate all generated secrets.")
     parser.add_argument(
@@ -710,10 +882,7 @@ def main() -> int:
     verify_user(args.yes)
     validate_mounts(args.skip_mount_check)
     install_ca_certificate(args.yes)
-    if args.skip_docker_install:
-        log_warning("Skipping Docker installation by request.")
-    else:
-        install_docker()
+    install_docker(args.skip_docker_install)
     values = build_env(args.rotate_secrets, "shamir" if args.openbao_shamir else None)
     write_env(DEPLOY_DIR / ".env", values)
     create_directories(values)

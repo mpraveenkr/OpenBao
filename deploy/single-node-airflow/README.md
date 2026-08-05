@@ -84,6 +84,42 @@ python3 install_platform.py --yes
 
 The installer validates that `/mnt/fast_data` and `/mnt/data_lake` are mounted filesystems before creating platform directories.
 
+### Docker prerequisites
+
+The installer provisions what is missing and leaves what is already present
+alone. It checks three things separately, because a host can have any subset:
+
+- **Docker Engine** — installed from `download.docker.com` if absent.
+- **Compose v2 plugin** — installed even when the engine is already there. This stack invokes `docker compose`, so the older `docker-compose` v1 script does not satisfy it.
+- **A running daemon the invoking user can reach** — the daemon is enabled and started, and the user is added to the `docker` group if needed.
+
+Group membership only applies to a new login session, so the installer uses
+sudo for the rest of its own run and tells you to log out and back in, or run
+`newgrp docker`, before using `docker compose` directly.
+
+To manage Docker yourself, for example from an internal mirror:
+
+```bash
+python3 install_platform.py --skip-docker-install
+```
+
+That flag now fails fast, listing what is missing, rather than proceeding into
+a broken deployment.
+
+## Choosing the storage target
+
+The stack ships with MinIO, and generated DAGs point at `configs/storage_minio.yaml`
+by default. To write to Azure Data Lake Storage Gen2 instead, fill in
+`configs/storage_adls.yaml`, seed the service principal secret in OpenBao, and
+regenerate the DAGs with the Azure profile:
+
+```bash
+python3 tools/generate_airflow_dags.py --profile single-node-airflow-adls --validate
+cd deploy/single-node-airflow && python3 install_platform.py --sync-dags-only
+```
+
+MinIO stays in the stack either way, since the smoke-test DAG uses it.
+
 ## OpenBao runtime secrets
 
 OpenBao runs as part of this stack. `docker compose up` starts the `openbao`
@@ -170,6 +206,13 @@ docker compose exec openbao bao kv put -mount=secret ingestion-framework/api/pjm
 docker compose exec openbao bao kv put -mount=secret ingestion-framework/database/itron_mv90_sqlserver_readonly \
   username='<readonly-user>' \
   password='<readonly-password>'
+```
+
+If you target Azure Data Lake, seed the service principal secret the same way:
+
+```bash
+docker compose exec openbao bao kv put -mount=secret ingestion-framework/adls \
+  client_secret='<service-principal-secret>'
 ```
 
 Authenticate with the root token from the init file first.

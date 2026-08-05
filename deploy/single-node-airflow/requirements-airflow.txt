@@ -1,7 +1,10 @@
 apache-airflow-providers-amazon
 apache-airflow-providers-common-sql
 apache-airflow-providers-http
+apache-airflow-providers-microsoft-azure
 apache-airflow-providers-microsoft-mssql
+azure-identity
+azure-storage-file-datalake
 boto3
 pandas
 psycopg2-binary

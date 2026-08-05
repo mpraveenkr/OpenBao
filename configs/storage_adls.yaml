@@ -1,0 +1,28 @@
+# Azure Data Lake Storage Gen2 target.
+#
+# Replace account_name, filesystem, tenant_id, and client_id with the values for
+# your Azure environment. tenant_id and client_id are identifiers and may be
+# written inline or as OpenBao references; the client secret must be an OpenBao
+# reference so it is never committed to this file.
+#
+# Seed the client secret before first use:
+#   bao kv put -mount=secret ingestion-framework/adls \
+#     client_secret='<service-principal-secret>'
+#
+# The service principal needs the Storage Blob Data Contributor role on the
+# filesystem, which grants the write and overwrite this writer performs.
+storages:
+  adls_bronze:
+    type: adls_gen2
+    account_name: examplecompanydatalake
+    filesystem: bronze
+    base_prefix: bronze
+    auth_method: service_principal
+    tenant_id: 00000000-0000-0000-0000-000000000000
+    client_id: 11111111-1111-1111-1111-111111111111
+    client_secret_ref: openbao:secret/data/ingestion-framework/adls#client_secret
+    encryption:
+      # ADLS Gen2 encrypts at rest with Microsoft-managed keys by default, which
+      # is what lets BCSI-classified sources pass security validation.
+      supported: true
+      mode: microsoft_managed

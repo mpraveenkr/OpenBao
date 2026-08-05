@@ -279,6 +279,33 @@ def test_generate_uses_container_project_root_override(tmp_path):
     assert "--storage /runtime/project/storage.yaml" in rendered
 
 
+def test_adls_profile_targets_the_azure_storage_config(tmp_path):
+    profile = generator.DEPLOYMENT_PROFILES["single-node-airflow-adls"]
+    source = generator.load_metadata(
+        write_source(tmp_path, "configs/sources/customers.yaml"),
+        tmp_path,
+    )
+
+    generated = generator.generate(
+        [source],
+        tmp_path / "dags",
+        storage=profile.storage,
+        audit_db=profile.audit_db,
+        container_project_root=profile.container_project_root,
+    )
+
+    rendered = generated[0].read_text(encoding="utf-8")
+    assert "--storage /opt/ingestion-framework/configs/storage_adls.yaml" in rendered
+    assert "--audit-db env:INGESTION_AUDIT_DB_URL" in rendered
+
+
+def test_adls_profile_storage_config_exists():
+    # A profile pointing at a missing config would only fail inside Airflow.
+    profile = generator.DEPLOYMENT_PROFILES["single-node-airflow-adls"]
+
+    assert (PROJECT_ROOT / profile.storage).exists()
+
+
 def test_validate_generated_dags_compiles_python(tmp_path):
     source = generator.load_metadata(
         write_source(tmp_path, "configs/sources/customers.yaml"),
