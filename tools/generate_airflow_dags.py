@@ -19,6 +19,7 @@ import yaml
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_OUTPUT_DIR = PROJECT_ROOT / "deploy/single-node-airflow/dags/generated"
 DEFAULT_STORAGE = "configs/storage_minio.yaml"
+ADLS_STORAGE = "configs/storage_adls.yaml"
 DEFAULT_AUDIT_DB = "env:INGESTION_AUDIT_DB_URL"
 CONTAINER_PROJECT_ROOT = "/opt/ingestion-framework"
 
@@ -45,6 +46,11 @@ DEPLOYMENT_PROFILES = {
     "single-node-airflow": DeploymentProfile(
         container_project_root=CONTAINER_PROJECT_ROOT,
         storage=DEFAULT_STORAGE,
+        audit_db=DEFAULT_AUDIT_DB,
+    ),
+    "single-node-airflow-adls": DeploymentProfile(
+        container_project_root=CONTAINER_PROJECT_ROOT,
+        storage=ADLS_STORAGE,
         audit_db=DEFAULT_AUDIT_DB,
     ),
     "local": DeploymentProfile(

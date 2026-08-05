@@ -21,6 +21,8 @@ dependencies = [
   "boto3",
   "requests",
   "psycopg2-binary",
+  "azure-storage-file-datalake",
+  "azure-identity",
 ]
 
 [project.optional-dependencies]
